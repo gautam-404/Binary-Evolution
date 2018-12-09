@@ -197,7 +197,7 @@ def time_evolution(M, M_donor, Mdot_accr, Mdot_loss, wd_type, donor_type, t_star
             k_aic = k
     
 
-        # if aic == True:               # NS Recycling 
+        if aic == True:               # NS Recycling 
             P_ns, w_ns, r = spin_ns_aic(nM, R, M_ns, w_wd)     # at aic
             nM = M_ns
             nM, M_donor, a, k, t, t1, M1 = time_steps(nM, M_donor, donor_type, 2.92316e-8, 0.8, Mdot_loss, t_aic, a, 3, k, t1)
