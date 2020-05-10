@@ -261,29 +261,29 @@ def main_evolution(real_time, current_time, primary, secondary, B, printing, rec
         P_new = P
 
 
-        # ### Acretors reaching break-up periods or if something goes wrong
-        # w_breakup = np.sqrt(G*primary.mass.value_in(units.MSun)/primary.radius.value_in(units.km)**3)
-        # P_breakup = ( 2 * np.pi /(w_breakup) ) * 3.154e+7    #seconds
-        # print(P_breakup)
-        # if P_new <= P_breakup and secondary.mass.value_in(units.MSun) >= M_secondary_limit:           ## NS gains mass (might not be realistic) and shrinks. 
-        #     if recycling == True:                                                               ## Thus we have a new breakup period. Essentially a rotationally supported NS
-        #         # code.particles.remove_particles(stars)
-        #         # stars_copy(primary_old, secondary)
-        #         # secondary = stars[1]
-        #         # primary = stars[0]
-        #         primary.spin = w_old |units.none
-        #         w, w_s, P_dot = magnetic_braking(primary, dt, B, M_old, mb_type=1)
-        # elif P_new <= P_breakup and secondary.mass.value_in(units.MSun) < M_secondary_limit:
-        #     # code.particles.remove_particles(stars)
-        #     # stars_copy(primary_old, secondary)
-        #     # secondary = stars[1]
-        #     # primary = stars[0]
-        #     primary.spin = w_old |units.none
-        #     w = magnetic_braking(primary, dt, B, M_old, mb_type=0)
-        # primary.spin = w |units.none
-        # w = primary.spin.value_in(units.none)
-        # P = ( 2 * np.pi /w ) * 3.154e+7    #seconds
-        # P_new = P
+        ### Acretors reaching break-up periods or if something goes wrong
+        w_breakup = np.sqrt(G*primary.mass.value_in(units.MSun)/primary.radius.value_in(units.km)**3)
+        P_breakup = ( 2 * np.pi /(w_breakup) ) * 3.154e+7    #seconds
+#         print(P_breakup)
+        if P_new <= P_breakup and secondary.mass.value_in(units.MSun) >= M_secondary_limit:           ## NS gains mass (might not be realistic) and shrinks. 
+            if recycling == True:                                                               ## Thus we have a new breakup period. Essentially a rotationally supported NS
+                # code.particles.remove_particles(stars)
+                # stars_copy(primary_old, secondary)
+                # secondary = stars[1]
+                # primary = stars[0]
+                primary.spin = w_old |units.none
+#                 w, w_s, P_dot = magnetic_braking(primary, dt, B, M_old, mb_type=1)
+        elif P_new <= P_breakup and secondary.mass.value_in(units.MSun) < M_secondary_limit:
+            # code.particles.remove_particles(stars)
+            # stars_copy(primary_old, secondary)
+            # secondary = stars[1]
+            # primary = stars[0]
+            primary.spin = w_old |units.none
+#             w = magnetic_braking(primary, dt, B, M_old, mb_type=0)
+        primary.spin = w |units.none
+        w = primary.spin.value_in(units.none)
+        P = ( 2 * np.pi /w ) * 3.154e+7    #seconds
+        P_new = P
 
 
 
@@ -303,14 +303,14 @@ def main_evolution(real_time, current_time, primary, secondary, B, printing, rec
             E_dot = 0
 
         
-        if primary.stellar_type.value_in(units.stellar_type) == 13 and M_dot:
+        if primary.stellar_type.value_in(units.stellar_type) == 13 and M_dot==0:
             eta = 0.1
             # L_gamma = 4.8e33 * ((B**2)/1e17) * (P / 3e-3)**-4 * (eta/0.1)
             # L_gamma = eta * E_dot
 
             f, alpha, beta = 0.0122, -2.12, 0.82                                    ##slot-gap two-pole caustic (TPC) Gonthier 2018
-            # L_gamma = 2.7621525e22 * f * (P/1e-3)**alpha * (P_dot/1e-21)**beta            ## erg/s
-            L_gamma = 1.724e34 * f * (P/1e-3)**alpha * (P_dot/1e-21)**beta            ## eV/s
+            L_gamma = 6.8172e35 * f * (P/1e-3)**alpha * (P_dot/1e-20)**beta            ## erg/s
+#             L_gamma = 1.724e34 * f * (P/1e-3)**alpha * (P_dot/1e-21)**beta            ## eV/s
         else:
             L_gamma = 0
 
@@ -325,15 +325,14 @@ def main_evolution(real_time, current_time, primary, secondary, B, printing, rec
         ### LMXB luminosity
         if M_dot>0:
             R_sch = 2 * G * primary.mass.value_in(units.MSun) / c**2
-            eta = R_sch / primary.radius.value_in(units.km)
-            L_x = eta * 0.5 * M_dot * c**2
+            eta = 0.5 * R_sch / primary.radius.value_in(units.km)
+            L_x = eta * G * primary.mass.value_in(units.MSun) * M_dot / primary.radius.value_in(units.km)
             L_x = L_x * 2e33 * (1e5)**2 / (3.154e+7)**3  # ergs/s
         else:
             L_x = 0
 
         L_x = L_x + L_x_pulsar_spindown
 
-        ## Write evolution
         if (M_dot!=0 or M_loss!=0) or (L_x != 0 or L_gamma!=0):
             if primary.stellar_type.value_in(units.stellar_type) == 13:
                 write_evolution(real_time, primary, secondary, current_time, L_x, P, P_dot, M_dot, M_loss, B, L_gamma, w_s, AIC=True)
@@ -644,18 +643,16 @@ D = 3.254
 
 
 def z(t):
-    t0 = 15e9
-    k = t0**(2/3)     # today at z = 0, t = t0
+    t0 = t_end
+    k = t0**(2.0/3)     # today at z = 0, t = t0
     if t == 0:
         z = 1e10
     else:
-        z = k*(t)**(-2/3) - 1
+        z = k*(t)**(-2.0/3) - 1
     return z
 
 
 def sfh():
-    t_end = 15e9
-
     ## SFR
     t = np.arange(0, t_end, dt)
     sfh = []
@@ -672,7 +669,7 @@ def sfh():
 def Nformed_at_t(dt, M_bulge, M_sim):
     rate = sfh()*dt/(M_sim)
     sfr = (rate/sum(rate)) * length
-    t = np.arange(0, 14e9, dt)
+    t = np.arange(0, t_end, dt)
     tr = []
     l = 0
     for i in range(len(t)):
@@ -692,7 +689,8 @@ def Nformed_at_t(dt, M_bulge, M_sim):
 
 if __name__ == "__main__":
     dt = 1e7
-
+    t_end = 15e9
+    
     M_bulge = 0.91e10
     M_sim = 1.63e8
 
@@ -703,17 +701,17 @@ if __name__ == "__main__":
     outdir = 'OutputFiles_test_v1'
     if os.path.exists(outdir):
             os.system("rm -rf %s" %outdir)
-    zip_file = True
-    # zip_file = False
+    # zip_file = True
+    zip_file = False
 
     global printing
-    printing = False
-    # printing = True
+    # printing = False
+    printing = True
 
 
     data = []
     data = read_data("ZAMS_/Hyd_accr.dat", data)
-    data = read_data("ZAMS_/He_accr.dat", data)
+    # data = read_data("ZAMS_/He_accr.dat", data)
     # data = read_data("AIC_final_updated.dat", data)
     # data = read_data("AIC_new_updated.dat", data)
     # data = read_data("AIC_final.5.dat", data)
@@ -726,11 +724,12 @@ if __name__ == "__main__":
 
 
     # B = 10**np.random.normal(loc=9, scale=0.3, size=len(data))
-    B = 10**np.random.normal(loc=8.5, scale=0.3, size=len(data))
+    B = 10**np.random.normal(loc=8.5, scale=0.475, size=len(data))
 
     tr = Nformed_at_t(dt, M_bulge, M_sim)
-
-    ncores = 32
+    
+    # number of parallel evolutions (each process runs an evolution)
+    ncores = 12
     slice_len = []
     data_slice = []
     B_slice = []
