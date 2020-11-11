@@ -18,6 +18,7 @@ import copy
 import random
 from scipy.stats import lognorm
 from tqdm import tqdm
+import paramiko
 
 
 def read_data(filename):
@@ -32,23 +33,10 @@ def read_data(filename):
 
 
     sftp_client = ssh_client.open_sftp()
-#     filename = 'anuj/Init_param.txt.gz'
-    f = sftp_client.open(filename)
-
-    data = []
-    with gzip.GzipFile(mode='rb', fileobj=f) as fin:
-        for line in fin:
-                t = line.split()
-                data.append( np.array([float(t[0]), float(t[1]), float(t[2]), 0]) )
-                if len(data) > 1e8:
-                    break
-    f.close()
-    data_all = np.matrix(data)
-    M_sim = float(sum(data_all[:,0])+sum(data_all[:,1]))
-    print(M_sim)
-
-    data = np.matrix(random.sample(list(data), int(len(data)*0.7)))
-#     data = np.matrix(data)
+    
+    data = np.load("/home/aashimas/anuj/"+filename, allow_pickle=True)
+    data = data.f.arr_0
+    M_sim = float(sum(data[:,0])+sum(data[:,1]))
     sftp_client.close()
     ssh_client.close()
     return data, M_sim
@@ -514,7 +502,7 @@ def parallel_evolution(i):
         code = BSE()            # initialise BSE
         code.parameters.binary_enhanced_mass_loss_parameter = 0    ## def = 0
         code.parameters.common_envelope_efficiency = 1                ## alpha, def=1
-        code.parameters.common_envelope_binding_energy_factor = 0.5     ## lambda, def=0.5
+        code.parameters.common_envelope_binding_energy_factor = -0.5     ## lambda, def=0.5
         code.parameters.common_envelope_model_flag = 0                 ## def = 0
         code.parameters.Eddington_mass_transfer_limit_factor = 1    ## def = 1
         code.parameters.wind_accretion_factor = 1.5                   ## def = 1.5
@@ -669,7 +657,7 @@ if __name__ == "__main__":
     t_end = 15e9
     
     M_bulge = 2e10
-    M_sim = 1e8
+#     M_sim = 1e8
 
     G = 1.3218607e+26               # km**3 * MSun**(-1) * yr**(-2)
     M_ch = 1.38 
@@ -688,8 +676,9 @@ if __name__ == "__main__":
     print("Reading input files...")
 #     data = np.load("aic_systems.npz", allow_pickle=True)['arr_0']
 #     data = np.load("Init_param.npz", allow_pickle=True)['arr_0']
-    data = np.load("Init_param_1e8.npz", allow_pickle=True)['arr_0']
+#     data = np.load("Init_param_1e8.npz", allow_pickle=True)['arr_0']
 #     data = np.load("Init_param_1e6.npz", allow_pickle=True)['arr_0']
+    data, M_sim = read_data("Init_param_1e7.npz")
 
 
     length = len(data)
@@ -699,9 +688,16 @@ if __name__ == "__main__":
     # input("Press any key to continue...")
 
     print("B_dist...")
-    atnf = pd.read_csv("atnf_bin_msps.txt", sep=";")
-    shape, loc, scale = lognorm.fit(atnf["BSURF"])
-    B_sam = lognorm(shape, loc=loc, scale=scale).rvs(int(1e8))
+    mu = 8.21
+    sigma = 0.21
+    s = np.random.normal(mu, sigma, int(1e6))
+    B_sim_chris = 10**s
+    x = np.linspace(min(B_sim_chris), max(B_sim_chris), int(4e3))
+    p = (np.sqrt(2*np.pi)*sigma)**-1 * np.exp( -(np.log10(x)-np.log10(10**mu))**2 /(2*sigma**2)  )
+    B_sam = []
+    for i in range(len(x)):
+        B_sam += [x[i]]*int(len(x)*p[i])
+        
 
     print("Sampling birth times...")
     t = np.arange(0, t_end, dt)
