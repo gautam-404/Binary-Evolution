@@ -52,4 +52,4 @@ if __name__ == "__main__":
     # print(init_data)
     init_data = np.array(init_data)
     print(sum(init_data[:,0])+sum(init_data[:,1]))
-    # np.savez_compressed("Init_data.npz", init_data)
+    np.savez_compressed("Init_data.npz", init_data)
