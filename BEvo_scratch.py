@@ -24,8 +24,8 @@ import paramiko
 def read_data(filename):
     host = "mash"
     port = 22
-    username = "aashimas"
-    password = "aashi@1970"
+    username = ""
+    password = ""
     ssh_client = paramiko.SSHClient() 
 
     ssh_client.set_missing_host_key_policy(paramiko.AutoAddPolicy())
