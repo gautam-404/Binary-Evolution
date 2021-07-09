@@ -39,8 +39,8 @@ def init():
 
 
 if __name__ == "__main__":
-    # M_tot = float(input("Enter the total mass to be simulated (units MSun) \n"))
-    M_tot = 2e8
+    M_tot = float(input("Enter the total mass to be simulated (units MSun) \n"))
+    # M_tot = 2e8
     manager = mp.Manager()
     init_data = manager.list()
     ncores = None
