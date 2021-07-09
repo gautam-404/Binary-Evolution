@@ -1,1 +1,1 @@
-# Binary population synthesis using BSE
+# Binary Population Synthesis with BSE
