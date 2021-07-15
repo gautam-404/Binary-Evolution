@@ -595,11 +595,6 @@ def f_disk(z):
 #     t0 = t_end
 #     k = t0**(2.0/3)     # today at z = 0, t = t0
 #     if t == 0:
-#         z = 1e10
-#     else:
-#         z = k*(t)**(-2.0/3) - 1
-#     return z
-
 def z(t):
     t0 = t_end
 #     k = (2/69.4)*1e9*3.154e7
@@ -645,7 +640,12 @@ def Nformed_at_t(dt, M_bulge, M_sim, SFR, l):
 #     else:
 #         t_maxsfr = t[np.argmax(sfr)]
 #         tr += [t_maxsfr]*int(length-l)
-    return tr
+    return tr#         z = 1e10
+#     else:
+#         z = k*(t)**(-2.0/3) - 1
+#     return z
+
+
 
 
 
