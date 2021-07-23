@@ -68,6 +68,6 @@ if __name__ == "__main__":
     else:
         with tqdm(total=length) as pbar:
             pool = mp.Pool(ncores)
-            iterable = zip(data, range(length), B_sam, tr, itertools.repeat(printing))
-            for aic in enumerate(pool.apply_async(evo.parallel_evolution, iterable)):
+            iterable = list(zip(data, range(length), B_sam, tr, itertools.repeat(printing)))
+            for aic in enumerate(pool.starmap(evo.parallel_evolution, iterable)):
                 pbar.update()
