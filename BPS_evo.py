@@ -282,7 +282,7 @@ def evolve_binary(B, real_time, printing):
             input("Move fwd?")
         else:
             print("AIC, NS formed!")
-            print_evolution(primary, secondary, current_time, real_time)
+            # print_evolution(primary, secondary, current_time, real_time)
     else:
         AIC = False
         if printing == True:
@@ -291,13 +291,13 @@ def evolve_binary(B, real_time, printing):
             input("Move fwd?")
         else:
             pass
-#             print("No AIC...")
+            print("No AIC...")
 #             print_evolution(primary, secondary, current_time, real_time)
     
     ## potential aic
     if primary.stellar_type.value_in(units.stellar_type) == 12:
         print("ONe but no AIC, yet..")
-        print_evolution(primary, secondary, current_time, real_time)
+        # print_evolution(primary, secondary, current_time, real_time)
         
     WD = False
     if primary.stellar_type.value_in(units.stellar_type) in [10,11,12] or secondary.stellar_type.value_in(units.stellar_type) in [10,11,12]:
@@ -366,7 +366,7 @@ def evolve_binary(B, real_time, printing):
 def parallel_evolution(data, i, B, t_birth, printing):
     M1_zams, M2_zams, a_zams, e_zams  = data[0], data[1], data[2], 0
 
-    outdir = "OutputFiles"
+    outdir = "~/OutputFiles"
     if not os.path.exists(outdir):
             try:
                 os.mkdir(outdir)
