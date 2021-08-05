@@ -403,7 +403,6 @@ def parallel_evolution(data, i, B, t_birth, printing):
         n_aic += 1
         print("Completed simulating AIC/WD: ", i)
         np.savez_compressed(os.path.join( outdir, "EvoHist_%i" %(i)), ehist_arr)
-        os.system('scp ')
         one += 1
 
 

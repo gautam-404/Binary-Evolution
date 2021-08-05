@@ -38,7 +38,7 @@ def B_dist():
 
 if __name__ == "__main__":
     print("Reading the initital input parameters...")
-    filename = "Init_data_2e8.npz"
+    filename = "Init_data.npz"
     data, M_sim = read_data(filename)
     length = len(data)
     n_sim = length
