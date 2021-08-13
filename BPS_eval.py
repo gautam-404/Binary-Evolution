@@ -10,8 +10,9 @@ def read_eval(readdir):
     ehists = np.array([])
     with tqdm(total=len(ehists)) as pbar:
         for i in range(len(filenames)):
-            ehist_i = np.load(filenames[i], allow_pickle=True)
-            ehist_i = ehist_i.f.arr_0
+            # ehist_i = np.load(filenames[i], allow_pickle=True)
+            # ehist_i = ehist_i.f.arr_0
+            ehist_i = np.loadtxt(filenames[i])
             ehists = np.append(ehists, ehist_i)
             pbar.update() 
     np.savez_compressed("ehists.npz")
@@ -567,7 +568,8 @@ class Distributions:
 #             for j in range(len(ehists)):
         with tqdm(total=len(indices)) as pbar:
             for j in indices:
-                self.process(j, B_list[j], a_list[j], eta[j], eta_g[j])
+                if type(ehists[j])!=np.float64:
+                    self.process(j, B_list[j], a_list[j], eta[j], eta_g[j])
                 pbar.update()
         print("Done!")
 #             ncores = 2
@@ -615,8 +617,8 @@ B_sam = []
 for i in range(len(x)):
     B_sam += [x[i]]*int(len(x)*p[i])
 
-
-ehists = read_eval("OutputFiles")
+print("Reading output files...")
+ehists = read_eval("/home/algernon/OutputFiles")
 aic_indices = aic_index(ehists)
 
 
