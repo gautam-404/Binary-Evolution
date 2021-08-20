@@ -1,21 +1,54 @@
 import numpy as np
 import glob
 from tqdm import tqdm
+import time
 import copy
 import pickle
+import itertools
+# import multiprocessing as mp
 from amuse.lab import Particles, units
+import concurrent.futures
+import os
+
+def reader(filenames, j, outdir):
+    ehists = np.array([])
+    for i in range(len(filenames)):
+        ehist_i = np.loadtxt(filenames[i])
+        ehists = np.append(ehists, ehist_i)
+        # print(ehists)
+        # exit()
+    np.savez(outdir+"/ehists%i" %j, ehists)
 
 def read_eval(readdir):
     filenames = glob.glob(readdir+'/EvoHist*')
+    outdir = "/home/algernon/Binary-Evolution/EHISTS"
+    if not os.path.exists(outdir):
+            try:
+                os.mkdir(outdir)
+            except:
+                pass
+        
     ehists = np.array([])
-    with tqdm(total=len(ehists)) as pbar:
-        for i in range(len(filenames)):
-            # ehist_i = np.load(filenames[i], allow_pickle=True)
-            # ehist_i = ehist_i.f.arr_0
-            ehist_i = np.loadtxt(filenames[i])
-            ehists = np.append(ehists, ehist_i)
-            pbar.update() 
-    np.savez_compressed("ehists.npz")
+    ncores = 128
+    files_slice = []
+    for x in range(0, ncores):
+        files_slice.append( filenames[ int((x)*len(filenames)/ncores) : int((x+1)*len(filenames)/ncores) ] )
+    executor = concurrent.futures.ProcessPoolExecutor( max_workers = ncores )
+    
+    if ncores == 1:
+        reader(files_slice[0], 0)
+    else:
+        futures = []
+        for x in range(0, ncores):
+            futures.append(executor.submit( reader, files_slice[x], x, outdir))
+
+        print(concurrent.futures.wait(futures))
+    
+    ehistfiles = glob.glob(outdir+'/ehists*')
+    for file in ehistfiles:
+        x = np.load(file)
+        ehists = np.append(ehists, x.f.arr_0)
+    np.savez("ehists__", ehists)
     return ehists
 
 def aic_index(ehists):
@@ -572,14 +605,6 @@ class Distributions:
                     self.process(j, B_list[j], a_list[j], eta[j], eta_g[j])
                 pbar.update()
         print("Done!")
-#             ncores = 2
-#             args = [(ehists, aic_indices[i]) for i in range(len(aic_indices))]
-#             print(args)
-#             with mp.Pool(processes=ncores) as pool:
-
-#                 for i in enumerate(pool.starmap(self.process, 
-#                                             args )):    
-#                     pbar.update()
 
                     
 
