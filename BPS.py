@@ -57,9 +57,13 @@ if __name__ == "__main__":
     if os.path.isfile("tr.npz"):
         tr = np.load("tr.npz", allow_pickle=True)
         tr = tr.f.arr_0
-    else: 
-        tr = SFH.SFH(dt, t_end, n_sim, length, "Bulge")
-    print(len(tr))
+    else:
+        bd = input("\n What star frmation history do you want the stellar population to evolve with? The MW Bulge (enter b/B) or the MW Disk (enter d/D)...\n")
+        if bd == 'b' or bd == 'B':
+            tr = SFH.SFH(dt, t_end, n_sim, length, "Bulge")
+        elif bd == 'd' or bd == 'D':
+            tr = SFH.SFH(dt, t_end, n_sim, length, "Disk")
+    # print(len(tr))
 
     printing = False
     print("\n \n Starting parallel evolution...")
