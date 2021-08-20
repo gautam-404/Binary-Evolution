@@ -366,7 +366,7 @@ def evolve_binary(B, real_time, printing):
 def parallel_evolution(data, i, B, t_birth, printing):
     M1_zams, M2_zams, a_zams, e_zams  = data[0], data[1], data[2], 0
 
-    outdir = "~/OutputFiles"
+    outdir = "/home/algernon/OutputFiles"
     if not os.path.exists(outdir):
             try:
                 os.mkdir(outdir)
@@ -402,7 +402,8 @@ def parallel_evolution(data, i, B, t_birth, printing):
     if AIC == True or WD == True:
         n_aic += 1
         print("Completed simulating AIC/WD: ", i)
-        np.savez_compressed(os.path.join( outdir, "EvoHist_%i" %(i)), ehist_arr)
+        if np.shape(ehist_arr)[0]>0:
+            np.savez_compressed(os.path.join( outdir, "EvoHist_%i" %(i)), ehist_arr)
         one += 1
 
 
