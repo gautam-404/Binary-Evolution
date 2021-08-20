@@ -38,19 +38,19 @@ def init():
     # return M1, M2, a
 
 
-if __name__ == "__main__":
-    M_tot = float(input("Enter the total mass to be simulated (units MSun) \n"))
-    # M_tot = 2e8
-    manager = mp.Manager()
-    init_data = manager.list()
-    ncores = None
-    l = int(M_tot/9.6)
-    with tqdm(total=l) as pbar:
-            pool = mp.Pool(ncores)
-            for i in range(l):
-                pool.imap_unordered(init(), 1)
-                pbar.update()
-    # print(init_data)
-    init_data = np.array(init_data)
-    print(sum(init_data[:,0])+sum(init_data[:,1]))
-    np.savez_compressed("Init_data.npz", init_data)
+
+M_tot = float(input("Enter the total mass to be simulated (units MSun) \n"))
+# M_tot = 2e8
+manager = mp.Manager()
+init_data = manager.list()
+ncores = None
+l = int(M_tot/9.6)
+with tqdm(total=l) as pbar:
+        pool = mp.Pool(ncores)
+        for i in range(l):
+            pool.imap_unordered(init(), 1)
+            pbar.update()
+# print(init_data)
+init_data = np.array(init_data)
+print(sum(init_data[:,0])+sum(init_data[:,1]))
+np.savez_compressed("Init_data.npz", init_data)
