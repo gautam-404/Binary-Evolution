@@ -366,7 +366,7 @@ def evolve_binary(B, real_time, printing):
 def parallel_evolution(data, i, B, t_birth, printing):
     M1_zams, M2_zams, a_zams, e_zams  = data[0], data[1], data[2], 0
 
-    outdir = "/home/algernon/OutputFiles"
+    outdir = os.path.expanduser('~')+"/OutputFiles"
     if not os.path.exists(outdir):
             try:
                 os.mkdir(outdir)

@@ -13,7 +13,9 @@ import os
 def reader(filenames, j, outdir):
     ehists = np.array([])
     for i in range(len(filenames)):
-        ehist_i = np.loadtxt(filenames[i])
+        # ehist_i = np.loadtxt(filenames[i])
+        ehist_i = np.load(filenames[i], allow_pickle=True)
+        ehist_i = ehist_i.f.arr_0
         ehists = np.append(ehists, ehist_i)
         # print(ehists)
         # exit()
@@ -21,7 +23,7 @@ def reader(filenames, j, outdir):
 
 def read_eval(readdir):
     filenames = glob.glob(readdir+'/EvoHist*')
-    outdir = "/home/algernon/Binary-Evolution/EHISTS"
+    outdir = os.path.expanduser('~')+"/Binary-Evolution/EHISTS"
     if not os.path.exists(outdir):
             try:
                 os.mkdir(outdir)
@@ -29,14 +31,14 @@ def read_eval(readdir):
                 pass
         
     ehists = np.array([])
-    ncores = 128
+    ncores = 8
     files_slice = []
     for x in range(0, ncores):
         files_slice.append( filenames[ int((x)*len(filenames)/ncores) : int((x+1)*len(filenames)/ncores) ] )
     executor = concurrent.futures.ProcessPoolExecutor( max_workers = ncores )
     
     if ncores == 1:
-        reader(files_slice[0], 0)
+        reader(files_slice[0], 0, outdir)
     else:
         futures = []
         for x in range(0, ncores):
@@ -643,7 +645,7 @@ for i in range(len(x)):
     B_sam += [x[i]]*int(len(x)*p[i])
 
 print("Reading output files...")
-ehists = read_eval("/home/algernon/OutputFiles")
+ehists = read_eval(os.path.expanduser('~')+"/OutputFiles")
 aic_indices = aic_index(ehists)
 
 
