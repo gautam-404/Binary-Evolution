@@ -11,7 +11,7 @@ Read the paper for details: [Millisecond Pulsars from Accretion Induced Collapse
     ```
     pip install amuse-framework
     ```
-* AMUSE BSE community code
+* [AMUSE BSE](https://amuse.readthedocs.io/en/latest/reference/available-codes.html#bse) community code
     <br> 
     ```
     pip install amuse-bse
