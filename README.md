@@ -3,7 +3,6 @@
 Read the paper for details: [Millisecond Pulsars from Accretion Induced Collapse naturally explain the Galactic Center Gamma-ray Excess](https://arxiv.org/abs/2106.00222)
 
 ## Getting started
-<br>
 
 ### Prerequisites
 * Python
