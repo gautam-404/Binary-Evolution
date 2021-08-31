@@ -95,7 +95,7 @@ REQUIRED_PACKAGES = ['numpy', 'tqdm']
 
 setuptools.setup(
     name='BPS',
-    version='1.0',
+    version='4.2.0',
     cmdclass={
         # Command class instantiated and run during pip install scenarios.
         'build': build,
