@@ -8,6 +8,7 @@ when running the workflow for remote execution.
 
 from distutils.command.build import build as _build
 import subprocess
+from tqdm import tqdm
 
 import setuptools
 
@@ -87,8 +88,10 @@ class CustomCommands(setuptools.Command):
           'Command %s failed: exit code: %s' % (command_list, p.returncode))
 
   def run(self):
-    for command in CUSTOM_COMMANDS:
-      self.RunCustomCommand(command)
+    with tqdm(total=len(CUSTOM_COMMANDS)) as pbar:
+        for command in CUSTOM_COMMANDS:
+            self.RunCustomCommand(command)
+            pbar.update()
 
 
 # Configure the required packages and scripts to install.
