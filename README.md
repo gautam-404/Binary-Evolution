@@ -3,10 +3,11 @@
 Read the paper for details: [Millisecond Pulsars from Accretion Induced Collapse naturally explain the Galactic Center Gamma-ray Excess](https://arxiv.org/abs/2106.00222)
 
 ## Getting started
+**Linux users can install this repository as a package by executing** 'pip install git+https://github.com/gautam-404/Binary-Evolution.git'
 
 ### Prerequisites
 * Python
-* [AMUSE Framework](https://github.com/amusecode/amuse)
+* [AMUSE Framework](https://amuse.readthedocs.io/en/latest/install/howto-install-AMUSE.html)
     <br> 
     ```
     pip install amuse-framework
@@ -16,11 +17,6 @@ Read the paper for details: [Millisecond Pulsars from Accretion Induced Collapse
     ```
     pip install amuse-bse
     ```
-* Other necessary python ppackages:
-    * numpy
-    * multiprocessing
-    * concurrent.futures
-    * itertools
 <br>
 <br>
 
