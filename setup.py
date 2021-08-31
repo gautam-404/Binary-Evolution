@@ -9,7 +9,12 @@ when running the workflow for remote execution.
 from distutils.command.build import build as _build
 import subprocess
 import os 
-os.system('pip install tqdm')
+os.system('apt install build-essential gfortran \
+  libopenmpi-dev openmpi-bin \
+  libgsl-dev cmake libfftw3-3 libfftw3-dev \
+  libgmp3-dev libmpfr6 libmpfr-dev \
+  libhdf5-serial-dev hdf5-tools \
+  libblas-dev liblapack-dev')
 from tqdm import tqdm
 
 import setuptools
@@ -90,11 +95,8 @@ class CustomCommands(setuptools.Command):
           'Command %s failed: exit code: %s' % (command_list, p.returncode))
 
   def run(self):
-    with tqdm(total=len(CUSTOM_COMMANDS)) as pbar:
-        for command in CUSTOM_COMMANDS:
-            self.RunCustomCommand(command)
-            pbar.update()
-
+    for command in CUSTOM_COMMANDS:
+        self.RunCustomCommand(command)
 
 # Configure the required packages and scripts to install.
 REQUIRED_PACKAGES = ['numpy', 'tqdm']
@@ -103,11 +105,11 @@ REQUIRED_PACKAGES = ['numpy', 'tqdm']
 setuptools.setup(
     name='BPS',
     version='1.0',
-    cmdclass={
-        # Command class instantiated and run during pip install scenarios.
-        'build': build,
-        'CustomCommands': CustomCommands,
-        },
+    # cmdclass={
+    #     # Command class instantiated and run during pip install scenarios.
+    #     'build': build,
+    #     'CustomCommands': CustomCommands,
+    #     },
     packages=setuptools.find_packages(),
     install_requires=REQUIRED_PACKAGES
     )
