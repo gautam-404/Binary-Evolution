@@ -1,0 +1,8 @@
+tqdm
+numpy 
+docutils 
+mpi4py 
+h5py 
+wheel
+amuse-framework
+amuse-bse
