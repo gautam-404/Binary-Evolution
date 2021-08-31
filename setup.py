@@ -58,7 +58,9 @@ CUSTOM_COMMANDS = [
     ['apt-get', '--assume-yes', 'install', 'libhdf5-serial-dev'],
     ['apt-get', '--assume-yes', 'install', 'hdf5-tools'],
     ['apt-get', '--assume-yes', 'install', 'libblas-dev'],
-    ['apt-get', '--assume-yes', 'install', 'liblapack-dev']
+    ['apt-get', '--assume-yes', 'install', 'liblapack-dev'],
+    ['pip', 'install', 'amuse-framework'],
+    ['pip', 'install', 'amuse-bse']
 ]
 
 
@@ -90,8 +92,7 @@ class CustomCommands(setuptools.Command):
 
 
 # Configure the required packages and scripts to install.
-REQUIRED_PACKAGES = [
-    'amuse-framework', 'amuse-bse', 'numpy', 'tqdm', 
+REQUIRED_PACKAGES = ['numpy', 'tqdm', 
     'wheel', 'docutils', 'mpi4py', 'h5py' 
     ]
 
