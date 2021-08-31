@@ -90,9 +90,6 @@ class CustomCommands(setuptools.Command):
 
 
 # Configure the required packages and scripts to install.
-# Note that the Python Dataflow containers come with numpy already installed
-# so this dependency will not trigger anything to be installed unless a version
-# restriction is specified.
 REQUIRED_PACKAGES = [
     'numpy', 'tqdm', 'numpy', 'docutils', 
     'mpi4py', 'h5py', 'wheel', 'amuse-framework', 'amuse-bse'
