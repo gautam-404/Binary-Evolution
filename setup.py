@@ -92,9 +92,7 @@ class CustomCommands(setuptools.Command):
 
 
 # Configure the required packages and scripts to install.
-REQUIRED_PACKAGES = ['numpy', 'tqdm', 
-    'wheel', 'docutils', 'mpi4py', 'h5py' 
-    ]
+REQUIRED_PACKAGES = ['numpy', 'tqdm']
 
 
 setuptools.setup(
