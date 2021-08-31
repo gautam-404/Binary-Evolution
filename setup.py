@@ -89,11 +89,11 @@ REQUIRED_PACKAGES = [
 setuptools.setup(
     name='BPS',
     version='1.0',
-    install_requires=REQUIRED_PACKAGES,
     packages=setuptools.find_packages(),
     cmdclass={
         # Command class instantiated and run during pip install scenarios.
         'build': build,
         'CustomCommands': CustomCommands,
-        }
+        },
+    install_requires=REQUIRED_PACKAGES
     )
