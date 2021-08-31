@@ -50,22 +50,6 @@ class build(_build):  # pylint: disable=invalid-name
 # The output of custom commands (including failures) will be logged in the
 # worker-startup log.
 CUSTOM_COMMANDS = [
-    ['apt', 'update'],
-    ['apt', '--assume-yes', 'install', 'build-essential'],
-    ['apt', '--assume-yes', 'install', 'gfortran'],
-    ['apt', '--assume-yes', 'install', 'libopenmpi-dev'],
-    ['apt', '--assume-yes', 'install', 'openmpi-bin'],
-    ['apt', '--assume-yes', 'install', 'libgsl-dev'],
-    ['apt', '--assume-yes', 'install', 'cmake'],
-    ['apt', '--assume-yes', 'install', 'libfftw3-3'],
-    ['apt', '--assume-yes', 'install', 'libfftw3-dev'],
-    ['apt', '--assume-yes', 'install', 'libgmp3-dev'],
-    ['apt', '--assume-yes', 'install', 'libmpfr6'],
-    ['apt', '--assume-yes', 'install', 'libmpfr-dev'],
-    ['apt', '--assume-yes', 'install', 'libhdf5-serial-dev'],
-    ['apt', '--assume-yes', 'install', 'hdf5-tools'],
-    ['apt', '--assume-yes', 'install', 'libblas-dev'],
-    ['apt', '--assume-yes', 'install', 'liblapack-dev'],
     ['pip', 'install', 'amuse-framework'],
     ['pip', 'install', 'amuse-bse']
 ]
@@ -98,17 +82,17 @@ class CustomCommands(setuptools.Command):
         self.RunCustomCommand(command)
 
 # Configure the required packages and scripts to install.
-REQUIRED_PACKAGES = ['numpy', 'tqdm', 'amuse-framework', 'amuse-bse']
+REQUIRED_PACKAGES = ['numpy', 'tqdm']
 
 
 setuptools.setup(
     name='BPS',
     version='1.0',
-    # cmdclass={
-    #     # Command class instantiated and run during pip install scenarios.
-    #     'build': build,
-    #     'CustomCommands': CustomCommands,
-    #     },
+    cmdclass={
+        # Command class instantiated and run during pip install scenarios.
+        'build': build,
+        'CustomCommands': CustomCommands,
+        },
     packages=setuptools.find_packages(),
     install_requires=REQUIRED_PACKAGES
     )
