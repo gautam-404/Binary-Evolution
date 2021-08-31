@@ -95,7 +95,7 @@ class CustomCommands(setuptools.Command):
 # restriction is specified.
 REQUIRED_PACKAGES = [
     'numpy', 'tqdm', 'numpy', 'docutils', 
-    'mpi4py', 'h5py', 'wheel'
+    'mpi4py', 'h5py', 'wheel', 'amuse-framework', 'amuse-bse'
     ]
 
 
