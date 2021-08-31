@@ -44,7 +44,6 @@ class build(_build):  # pylint: disable=invalid-name
 # worker-startup log.
 CUSTOM_COMMANDS = [
     ['apt-get', 'update'],
-    ['apt-get', 'install', '-y', 'apt-transport-https'],
     ['apt-get', '--assume-yes', 'install', 'build-essential'],
     ['apt-get', '--assume-yes', 'install', 'gfortran'],
     ['apt-get', '--assume-yes', 'install', 'libopenmpi-dev'],
@@ -56,7 +55,7 @@ CUSTOM_COMMANDS = [
     ['apt-get', '--assume-yes', 'install', 'libgmp3-dev'],
     ['apt-get', '--assume-yes', 'install', 'libmpfr6'],
     ['apt-get', '--assume-yes', 'install', 'libmpfr-dev'],
-    ['apt-get', '--assume-yes', 'install', 'libhdf5-serial-dev '],
+    ['apt-get', '--assume-yes', 'install', 'libhdf5-serial-dev'],
     ['apt-get', '--assume-yes', 'install', 'hdf5-tools'],
     ['apt-get', '--assume-yes', 'install', 'libblas-dev'],
     ['apt-get', '--assume-yes', 'install', 'liblapack-dev']
