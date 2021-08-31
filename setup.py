@@ -44,23 +44,10 @@ class build(_build):  # pylint: disable=invalid-name
 # worker-startup log.
 CUSTOM_COMMANDS = [
     ['apt', 'update'],
-    ['apt', '--assume-yes', 'install', 'build-essential'],
-    ['apt', '--assume-yes', 'install', 'gfortran'],
-    ['apt', '--assume-yes', 'install', 'libopenmpi-dev'],
-    ['apt', '--assume-yes', 'install', 'openmpi-bin'],
-    ['apt', '--assume-yes', 'install', 'libgsl-dev'],
-    ['apt', '--assume-yes', 'install', 'cmake'],
-    ['apt', '--assume-yes', 'install', 'libfftw3-3'],
-    ['apt', '--assume-yes', 'install', 'libfftw3-dev'],
-    ['apt', '--assume-yes', 'install', 'libgmp3-dev'],
-    ['apt', '--assume-yes', 'install', 'libmpfr6'],
-    ['apt', '--assume-yes', 'install', 'libmpfr-dev'],
-    ['apt', '--assume-yes', 'install', 'libhdf5-serial-dev'],
-    ['apt', '--assume-yes', 'install', 'hdf5-tools'],
-    ['apt', '--assume-yes', 'install', 'libblas-dev'],
-    ['apt', '--assume-yes', 'install', 'liblapack-dev'],
-    ['pip', 'install', 'amuse-framework'],
-    ['pip', 'install', 'amuse-bse']
+    ['apt', '--assume-yes', 'install', 'build-essential', 'gfortran', 'libopenmpi-dev',
+      'openmpi-bin', 'libgsl-dev', 'cmake', 'libfftw3-3', 'libfftw3-dev', 
+      'libgmp3-dev', 'libmpfr6', 'libmpfr-dev', 'libhdf5-serial-dev',
+      'hdf5-tools', 'libblas-dev', 'liblapack-dev', 'amuse-framework', 'amuse-bse']
 ]
 
 class CustomCommands(setuptools.Command):
