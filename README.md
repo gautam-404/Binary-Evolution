@@ -5,6 +5,8 @@ Read the paper for details: [Millisecond Pulsars from Accretion Induced Collapse
 ## Getting started
 * *Linux users can install this repository as a package by executing `pip install git+https://github.com/gautam-404/Binary-Evolution.git`*
 
+**For installation from scratch:**
+
 ### Prerequisites
 * Python
 * [AMUSE Framework](https://amuse.readthedocs.io/en/latest/install/howto-install-AMUSE.html)
@@ -12,6 +14,7 @@ Read the paper for details: [Millisecond Pulsars from Accretion Induced Collapse
     ```
     pip install amuse-framework
     ```
+    Visit the AMUSE docs link and install all the dependancies
 * [AMUSE BSE](https://amuse.readthedocs.io/en/latest/reference/available-codes.html#bse) community code
     <br> 
     ```
