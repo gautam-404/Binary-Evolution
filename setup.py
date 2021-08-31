@@ -91,7 +91,8 @@ class CustomCommands(setuptools.Command):
 
 # Configure the required packages and scripts to install.
 REQUIRED_PACKAGES = [
-    'amuse-framework', 'amuse-bse', 'numpy', 'tqdm', 'wheel'
+    'amuse-framework', 'amuse-bse', 'numpy', 'tqdm', 
+    'wheel', 'docutils', 'mpi4py', 'h5py' 
     ]
 
 
