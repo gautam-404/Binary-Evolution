@@ -15,7 +15,6 @@ os.system('apt install build-essential gfortran \
   libgmp3-dev libmpfr6 libmpfr-dev \
   libhdf5-serial-dev hdf5-tools \
   libblas-dev liblapack-dev')
-from tqdm import tqdm
 
 import setuptools
 
