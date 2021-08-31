@@ -8,6 +8,8 @@ when running the workflow for remote execution.
 
 from distutils.command.build import build as _build
 import subprocess
+import os 
+os.system('pip install tqdm')
 from tqdm import tqdm
 
 import setuptools
