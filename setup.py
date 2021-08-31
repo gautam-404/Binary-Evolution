@@ -44,8 +44,21 @@ class build(_build):  # pylint: disable=invalid-name
 # worker-startup log.
 CUSTOM_COMMANDS = [
     ['apt-get', 'update'],
-    ['apt-get', '--assume-yes', 'install', 'build-essential']
-    #  gfortran libopenmpi-dev openmpi-bin libgsl-dev cmake libfftw3-3 libfftw3-dev libgmp3-dev libmpfr6 libmpfr-dev libhdf5-serial-dev hdf5-tools libblas-dev liblapack-dev'],
+    ['apt-get', '--assume-yes', 'install', 'build-essential'],
+    ['apt-get', '--assume-yes', 'install', 'gfortran'],
+    ['apt-get', '--assume-yes', 'install', 'libopenmpi-dev'],
+    ['apt-get', '--assume-yes', 'install', 'openmpi-bin'],
+    ['apt-get', '--assume-yes', 'install', 'libgsl-dev'],
+    ['apt-get', '--assume-yes', 'install', 'cmake'],
+    ['apt-get', '--assume-yes', 'install', 'libfftw3-3'],
+    ['apt-get', '--assume-yes', 'install', 'libfftw3-dev'],
+    ['apt-get', '--assume-yes', 'install', 'libgmp3-dev'],
+    ['apt-get', '--assume-yes', 'install', 'libmpfr6'],
+    ['apt-get', '--assume-yes', 'install', 'libmpfr-dev'],
+    ['apt-get', '--assume-yes', 'install', 'libhdf5-serial-dev '],
+    ['apt-get', '--assume-yes', 'install', 'hdf5-tools'],
+    ['apt-get', '--assume-yes', 'install', 'libblas-dev'],
+    ['apt-get', '--assume-yes', 'install', 'liblapack-dev']
 ]
 
 
