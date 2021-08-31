@@ -47,7 +47,9 @@ CUSTOM_COMMANDS = [
     ['apt', '--assume-yes', 'install', 'build-essential', 'gfortran', 'libopenmpi-dev',
       'openmpi-bin', 'libgsl-dev', 'cmake', 'libfftw3-3', 'libfftw3-dev', 
       'libgmp3-dev', 'libmpfr6', 'libmpfr-dev', 'libhdf5-serial-dev',
-      'hdf5-tools', 'libblas-dev', 'liblapack-dev', 'amuse-framework', 'amuse-bse']
+      'hdf5-tools', 'libblas-dev', 'liblapack-dev'],
+    ['pip', 'install', 'amuse-framework'],
+    ['pip', 'install', 'amuse-bse']
 ]
 
 class CustomCommands(setuptools.Command):
