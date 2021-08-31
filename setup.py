@@ -44,7 +44,7 @@ class build(_build):  # pylint: disable=invalid-name
 # worker-startup log.
 CUSTOM_COMMANDS = [
     ['apt', 'update'],
-    ['apt', '--assume-yes', 'install', 'build-essential', 'gfortran', 'libopenmpi-dev',
+    ['apt', '-y', 'install', 'build-essential', 'gfortran', 'libopenmpi-dev',
       'openmpi-bin', 'libgsl-dev', 'cmake', 'libfftw3-3', 'libfftw3-dev', 
       'libgmp3-dev', 'libmpfr6', 'libmpfr-dev', 'libhdf5-serial-dev',
       'hdf5-tools', 'libblas-dev', 'liblapack-dev'],
