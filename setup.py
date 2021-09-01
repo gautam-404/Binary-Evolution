@@ -43,12 +43,13 @@ class build(_build):  # pylint: disable=invalid-name
 # The output of custom commands (including failures) will be logged in the
 # worker-startup log.
 CUSTOM_COMMANDS = [
-    ['sudo', 'chown', '-Rv', '_apt:root', '/var/cache/apt/archives/partial/'],
-    ['sudo', 'chmod', '-Rv', '700', '/var/cache/apt/archives/partial/'],
     ['sudo', 'apt-get', 'update'],
     ['sudo', 'apt-get', 'upgrade', '-y'],
     ['sudo', 'apt-get', '-yq', 'install', 'build-essential'],
     ['sudo', 'apt-get', '-yq', 'install', 'gfortran'],
+    ['sudo', 'apt-get', '-yq', 'download', 'openmpi-bin'],
+    ['sudo', 'chown', '-Rv', '_apt:root', '/var/cache/apt/archives/partial/'],
+    ['sudo', 'chmod', '-Rv', '700', '/var/cache/apt/archives/partial/'],
     ['sudo', 'apt-get', '-yq', 'download', 'openmpi-bin'],
     ['sudo', 'dpkg', '--unpack', 'openmpi-bin*.deb'],
     ['sudo', 'rm', '/var/lib/dpkg/info/openmpi-bin.postinst', '-f'],
