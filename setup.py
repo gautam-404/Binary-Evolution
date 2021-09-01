@@ -46,6 +46,7 @@ CUSTOM_COMMANDS = [
     ['sudo', 'apt-get', 'update'],
     ['sudo', 'apt-get', '-yq', 'install', 'build-essential'],
     ['sudo', 'apt-get', '-yq', 'install', 'gfortran'],
+    ['sudo', 'dpkg', '--configure', '-a']
     ['sudo', 'apt-get', '-yq', 'install', 'libopenmpi-dev'],
     ['sudo', 'apt-get', '-yq', 'install', 'openmpi-bin'],
     ['sudo', 'apt-get', '-yq', 'install', 'libgsl-dev'],
