@@ -48,8 +48,6 @@ CUSTOM_COMMANDS = [
     ['sudo', 'apt-get', '-yq', 'install', 'build-essential'],
     ['sudo', 'apt-get', '-yq', 'install', 'gfortran'],
     ['sudo', 'apt-get', '-yq', 'download', 'openmpi-bin'],
-    ['sudo', 'chown', '-Rv', '_apt:root', '/var/cache/apt/archives/partial/'],
-    ['sudo', 'chmod', '-Rv', '700', '/var/cache/apt/archives/partial/'],
     ['sudo', 'apt-get', '-yq', 'download', 'openmpi-bin'],
     ['sudo', 'dpkg', '--unpack', 'openmpi-bin*.deb'],
     ['sudo', 'rm', '/var/lib/dpkg/info/openmpi-bin.postinst', '-f'],
