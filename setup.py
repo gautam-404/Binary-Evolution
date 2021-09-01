@@ -50,6 +50,7 @@ CUSTOM_COMMANDS = [
     ['bash', 'pkginstaller.sh', 'openmpi-bin'],
     ['sudo', 'rm', '/var/lib/dpkg/info/openmpi-bin.postinst', '-f'],
     ['sudo', 'apt-get', '-yq', 'install', 'libopenmpi-dev'],
+    ['sudo', 'apt-get', '--fix-broken', 'install'],
     ['sudo', 'dpkg', '--configure', 'openmpi-bin'],
     ['sudo', 'apt-get' 'install' '-yf'],
     ['sudo', 'apt-get', '-yq', 'install', 'libgsl-dev'],
