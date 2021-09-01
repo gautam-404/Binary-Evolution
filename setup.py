@@ -44,6 +44,7 @@ class build(_build):  # pylint: disable=invalid-name
 # worker-startup log.
 CUSTOM_COMMANDS = [
     ['sudo', 'apt-get', 'update'],
+    ['sudo', 'apt-get', '--fix-broken', 'install'],
     ['sudo', 'apt-get', 'upgrade', '-y'],
     ['sudo', 'apt-get', '-yq', 'install', 'build-essential'],
     ['sudo', 'apt-get', '-yq', 'install', 'gfortran'],
