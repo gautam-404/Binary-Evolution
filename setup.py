@@ -43,7 +43,7 @@ class build(_build):  # pylint: disable=invalid-name
 # The output of custom commands (including failures) will be logged in the
 # worker-startup log.
 CUSTOM_COMMANDS = [
-    ['sudo', 'apt-get', 'update'],
+    ['sudo', 'apt-get', 'update', '&&', 'sudo', 'apt', 'upgrade', '-y'],
     ['sudo', 'apt-get', '-yq', 'install', 'build-essential'],
     ['sudo', 'apt-get', '-yq', 'install', 'gfortran'],
     ['sudo', 'apt-get', 'install', '-f'],
