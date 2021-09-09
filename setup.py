@@ -1,11 +1,3 @@
-"""Setup.py module for the workflow's worker utilities.
-All the workflow related code is gathered in a package that will be built as a
-source distribution, staged in the staging area for the workflow being run and
-then installed in the workers when they start running.
-This behavior is triggered by specifying the --setup_file command line option
-when running the workflow for remote execution.
-"""
-
 from distutils.command.build import build as _build
 import subprocess
 
@@ -15,10 +7,6 @@ import setuptools
 # This class handles the pip install mechanism.
 class build(_build):  # pylint: disable=invalid-name
   """A build command class that will be invoked during package install.
-  The package built using the current setup.py will be staged and later
-  installed in the worker using `pip install package'. This class will be
-  instantiated during install for this specific scenario and will trigger
-  running the custom commands specified.
   """
   sub_commands = _build.sub_commands + [('CustomCommands', None)]
 
