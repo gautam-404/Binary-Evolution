@@ -11,25 +11,6 @@ class build(_build):  # pylint: disable=invalid-name
   sub_commands = _build.sub_commands + [('CustomCommands', None)]
 
 
-# Some custom command to run during setup. The command is not essential for this
-# workflow. It is used here as an example. Each command will spawn a child
-# process. Typically, these commands will include steps to install non-Python
-# packages. For instance, to install a C++-based library libjpeg62 the following
-# two commands will have to be added:
-#
-#     ['apt-get', 'update'],
-#     ['apt-get', '--assume-yes', install', 'libjpeg62'],
-#
-# First, note that there is no need to use the sudo command because the setup
-# script runs with appropriate access.
-# Second, if apt-get tool is used then the first command needs to be 'apt-get
-# update' so the tool refreshes itself and initializes links to download
-# repositories.  Without this initial step the other apt-get install commands
-# will fail with package not found errors. Note also --assume-yes option which
-# shortcuts the interactive confirmation.
-#
-# The output of custom commands (including failures) will be logged in the
-# worker-startup log.
 CUSTOM_COMMANDS = [
     ['sudo', 'apt-get', 'update'],
     ['sudo', 'apt-get', '--fix-broken', 'install'],
