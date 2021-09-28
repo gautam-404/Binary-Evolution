@@ -65,7 +65,7 @@ class CustomCommands(setuptools.Command):
         self.RunCustomCommand(command)
 
 # Configure the required packages and scripts to install.
-REQUIRED_PACKAGES = ['numpy', 'tqdm']
+REQUIRED_PACKAGES = ['numpy', 'amuse-framework', 'amuse-bse', 'matplotlib']
 
 
 setuptools.setup(
