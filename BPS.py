@@ -4,6 +4,7 @@ import numpy as np
 np.seterr(divide = 'ignore')
 np.seterr(invalid = 'ignore')
 import matplotlib.pyplot as plt
+import istarmap
 import multiprocessing as mp
 import random
 from tqdm import tqdm
@@ -11,7 +12,7 @@ import itertools
 import os
 
 import BPS_SFH as SFH
-import BPS_evo as evo
+import BPS_evo_copy as evo
 
 
 
@@ -70,11 +71,18 @@ if __name__ == "__main__":
     print("\n \n Starting parallel evolution...")
     ncores = None
     if ncores == 1:
-        for i in range(length):
-            evo.parallel_evolution(data[i], i, B_sam[i], tr[i], printing)
-    else:
         with tqdm(total=length) as pbar:
-            pool = mp.Pool(ncores)
-            iterable = list(zip(data, range(length), B_sam, tr, itertools.repeat(printing)))
-            for aic in enumerate(pool.starmap(evo.parallel_evolution, iterable)):
+            for i in range(length):
+                evo.parallel_evolution(data[i], i, B_sam[i], tr[i], printing)
                 pbar.update()
+    else:
+        # with tqdm(total=length) as pbar:
+        #     pool = mp.Pool(ncores)
+        #     iterable = list(zip(data, range(length), B_sam, tr, itertools.repeat(printing)))
+        #     for aic in enumerate(pool.starmap(evo.parallel_evolution, iterable)):
+        #         pbar.update()
+        with mp.Pool(ncores) as pool:
+            iterable = list(zip(data, range(length), B_sam, tr, itertools.repeat(printing)))
+            for _ in tqdm(pool.istarmap(evo.parallel_evolution, iterable),
+                            total=len(iterable)):
+                pass
