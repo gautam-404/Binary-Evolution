@@ -258,7 +258,7 @@ def evolve_binary(B, real_time, printing):
     secondary = stars[1]
     primary = stars[0]
     current_time = 0 |units.yr
-    dt = 1e7 |units.yr
+    dt = 1e8 |units.yr
 
 #     global alpha
 #     alpha = np.random.randint(0, 100 + 1)*np.pi/(2*100)
@@ -280,30 +280,16 @@ def evolve_binary(B, real_time, printing):
             print("AIC, NS formed!")
             print_evolution(primary, secondary, current_time, real_time)
             input("Move fwd?")
-        else:
-            print("AIC, NS formed!")
-            # print_evolution(primary, secondary, current_time, real_time)
     else:
         AIC = False
         if printing == True:
             print("No AIC...")
             print_evolution(primary, secondary, current_time, real_time)
             input("Move fwd?")
-        else:
-            pass
-            print("No AIC...")
-#             print_evolution(primary, secondary, current_time, real_time)
-    
-    ## potential aic
-    if primary.stellar_type.value_in(units.stellar_type) == 12:
-        print("ONe but no AIC, yet..")
-        # print_evolution(primary, secondary, current_time, real_time)
         
     WD = False
     if primary.stellar_type.value_in(units.stellar_type) in [10,11,12] or secondary.stellar_type.value_in(units.stellar_type) in [10,11,12]:
         WD = True
-
-
 
     
 #     print(primary.initial_mass.value_in(units.MSun))
@@ -348,17 +334,13 @@ def evolve_binary(B, real_time, printing):
 #         AIC = False
     if primary.stellar_type.value_in(units.stellar_type) != 13:
         AIC = False
+        
+    NS = False    
+    if primary.stellar_type.value_in(units.stellar_type) == 13 or secondary.stellar_type.value_in(units.stellar_type) == 13:
+        NS = True
 
-#     if AIC == True: 
-#         fmsp.write("%f  \t\t" %(t_aic) )
-#         fmsp.write("%E  \t\t" %(P_aic) )
-#         fmsp.write("%E  \t\t" %(P) )
-#         fmsp.write("%E  \t\t" %(B) )
-#         fmsp.write("\n")
-        # print("\n \n \n ")
-#         print_evolution(primary, secondary, current_time, real_time)
     
-    return AIC, WD
+    return AIC, WD, NS
 
 
 
@@ -367,11 +349,6 @@ def parallel_evolution(data, i, B, t_birth, printing):
     M1_zams, M2_zams, a_zams, e_zams  = data[0], data[1], data[2], 0
 
     outdir = os.path.expanduser('~')+"/OutputFiles"
-    if not os.path.exists(outdir):
-            try:
-                os.mkdir(outdir)
-            except:
-                pass
         
 
     one = 0
@@ -397,14 +374,11 @@ def parallel_evolution(data, i, B, t_birth, printing):
     ehist_arr = []
 
     global real_time
-    AIC, WD = evolve_binary(B, t_birth, printing)
+    AIC, WD, NS = evolve_binary(B, t_birth, printing)
 
     if AIC == True or WD == True:
-        n_aic += 1
-        print("Completed simulating AIC/WD: ", i)
-        if np.shape(ehist_arr)[0]>0:
-            np.savez_compressed(os.path.join( outdir, "EvoHist_%i" %(i)), ehist_arr)
-        one += 1
+        # print("Completed simulating AIC/WD: ", i)
+        np.savetxt(os.path.join( outdir, "EvoHist_%i" %(i)), ehist_arr)
 
 
 

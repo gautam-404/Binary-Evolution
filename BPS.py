@@ -15,7 +15,6 @@ import BPS_SFH as SFH
 import BPS_evo_copy as evo
 
 
-
 def read_data(filename):
     data = np.load(filename, allow_pickle=True)
     data = data.f.arr_0
@@ -40,7 +39,8 @@ def B_dist():
 
 if __name__ == "__main__":
     print("Reading the initital input parameters...")
-    filename = "Init_data_2e8.npz"
+    # filename = "Init_data_2e8.npz"
+    filename = "Init_data_1e6.npz"
     if not os.path.isfile(filename):
         import BE_init
     data, M_sim = read_data(filename)
@@ -67,22 +67,33 @@ if __name__ == "__main__":
             tr = SFH.SFH(dt, t_end, n_sim, length, "Disk")
     # print(len(tr))
 
+    outdir = os.path.expanduser('~')+"/OutputFiles"
+    if not os.path.exists(outdir):
+            try:
+                os.mkdir(outdir)
+            except:
+                pass
+    else:
+        os.system("rm -rf "+outdir)
+        os.mkdir(outdir)
+
     printing = False
     print("\n \n Starting parallel evolution...")
-    ncores = None
+    ncores = 128
     if ncores == 1:
         with tqdm(total=length) as pbar:
             for i in range(length):
                 evo.parallel_evolution(data[i], i, B_sam[i], tr[i], printing)
                 pbar.update()
     else:
-        # with tqdm(total=length) as pbar:
-        #     pool = mp.Pool(ncores)
-        #     iterable = list(zip(data, range(length), B_sam, tr, itertools.repeat(printing)))
-        #     for aic in enumerate(pool.starmap(evo.parallel_evolution, iterable)):
-        #         pbar.update()
         with mp.Pool(ncores) as pool:
             iterable = list(zip(data, range(length), B_sam, tr, itertools.repeat(printing)))
             for _ in tqdm(pool.istarmap(evo.parallel_evolution, iterable),
-                            total=len(iterable)):
+                            total=length):
                 pass
+
+        # iterable = list(zip(data, range(length), B_sam, tr, itertools.repeat(printing)))
+        # with tqdm(total=length) as pbar:
+        #     for i in range(length):
+        #         evo.parallel_evolution.remote(data[i], i, B_sam[i], tr[i], printing)
+        #         pbar.update()

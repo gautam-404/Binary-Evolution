@@ -11,12 +11,12 @@ import concurrent.futures
 import os
 
 def reader(filenames, j, outdir):
-    ehists = np.array([])
+    ehists = []
     for i in range(len(filenames)):
         # ehist_i = np.loadtxt(filenames[i])
         ehist_i = np.load(filenames[i], allow_pickle=True)
         ehist_i = ehist_i.f.arr_0
-        ehists = np.append(ehists, ehist_i)
+        ehists.append(ehists, ehist_i)
         # print(ehists)
         # exit()
     np.savez(outdir+"/ehists%i" %j, ehists)
