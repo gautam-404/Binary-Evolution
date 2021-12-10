@@ -85,23 +85,36 @@ def evolve_binary(B, real_time, printing):
                               secondary.mass.value_in(units.MSun), secondary.radius.value_in(units.RSun),  
                                secondary.stellar_type.value_in(units.stellar_type)] )
 
+<<<<<<< HEAD
         #### To print the evolution
         if printing == True:
             print_evolution(primary, secondary, current_time, real_time)
 
+=======
+>>>>>>> 67f3536c5d5286c3711129a151c94f704465d8f5
         if (primary_old_type == 12 and primary.stellar_type.value_in(units.stellar_type) == 13) or (secondary_old_type == 12 and secondary.stellar_type.value_in(units.stellar_type) == 13):
             AIC = True
         if (primary.stellar_type.value_in(units.stellar_type) == 13 and primary_old_type!=13) or (secondary_old_type != 13 and secondary.stellar_type.value_in(units.stellar_type) == 13):
             NS = True
         if primary.stellar_type.value_in(units.stellar_type) > 13 or secondary.stellar_type.value_in(units.stellar_type) > 13:
+<<<<<<< HEAD
             dt = 1e8 |units.yr
 
+=======
+            # break
+            pass
+>>>>>>> 67f3536c5d5286c3711129a151c94f704465d8f5
 
     return AIC, NS
 
 
+<<<<<<< HEAD
 def parallel_evolution(data, i, B, t_birth, ecc, printing):
     M1_zams, M2_zams, a_zams, e_zams  = data[0], data[1], data[2], ecc
+=======
+def parallel_evolution(data, i, B, t_birth, printing):
+    M1_zams, M2_zams, a_zams, e_zams  = data[0], data[1], data[2], 0
+>>>>>>> 67f3536c5d5286c3711129a151c94f704465d8f5
 
     outdir = os.path.expanduser('~')+"/OutputFiles"
 
@@ -118,10 +131,13 @@ def parallel_evolution(data, i, B, t_birth, ecc, printing):
     code.parameters.white_dwarf_IFMR_flag =  0           ## ifflag > 0 uses white dwarf IFMR, def = 0
     code.parameters.white_dwarf_cooling_flag =  1        ## wdflag > 0 uses modified-Mestel cooling for WDs (0). (default value:1)
     code.parameters.neutron_star_mass_flag = 1      ## def = 1, Belczynski
+<<<<<<< HEAD
     code.parameters.fractional_time_step_1 = 0.05    ## def = 0.05; MS phase
     code.parameters.fractional_time_step_2 = 0.01    ## def = 0.01; GB, CHeB, AGB, HeGB phase
     code.parameters.fractional_time_step_3 = 0.02    ## def = 0.02; HG, HeMS phase
 
+=======
+>>>>>>> 67f3536c5d5286c3711129a151c94f704465d8f5
 
     init_binary(M1_zams|units.MSun, M2_zams|units.MSun, a_zams|units.RSun, e_zams)    
 
