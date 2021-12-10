@@ -94,10 +94,10 @@ if __name__ == "__main__":
         os.mkdir(outdir)
 
     # printing = bool(input("Printing on? (True/False)"))
-    printing = True
+    printing = False
     print("\n \n Starting parallel evolution...")
     # ncores = int(input("Enter the number of parallel processes needed:"))
-    ncores = 1
+    ncores = None
     if ncores == 1:
         with tqdm(total=length) as pbar:
             for i in range(length):
