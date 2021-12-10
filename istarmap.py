@@ -22,5 +22,4 @@ def istarmap(self, func, iterable, chunksize=1):
         ))
     return (item for chunk in result for item in chunk)
 
-
 mpp.Pool.istarmap = istarmap
