@@ -131,9 +131,8 @@ def parallel_evolution(data, i, B, t_birth, ecc, printing):
     global real_time
     AIC, NS = evolve_binary(B, t_birth, printing)
 
-    if NS == True:
-        # print("Completed simulating NS: ", i)
-        np.savetxt(os.path.join( outdir, "EvoHist_%i" %(i)), ehist_arr)
+    # print("Completed simulating NS: ", i)
+    np.savetxt(os.path.join( outdir, "EvoHist_%i" %(i)), ehist_arr)
     
     release_list(ehist_arr)
 

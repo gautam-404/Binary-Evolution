@@ -68,20 +68,20 @@ if __name__ == "__main__":
     # print(len(tr))
 
     #eccentricity
-    e = np.linspace(0,1)
-    f_e = []
-    for ee in e:
-        if ee>0:
-            f_e.append( 0.55/ee**(9/20) )
-        else:
-            f_e.append(0)
-    e_ = []
-    for i in range(len(e)):
-        e_ += [e[i]]*int(len(e)*f_e[i]) 
-    ecc = np.random.choice(e_, len(data))
+    # e = np.linspace(0,1)
+    # f_e = []
+    # for ee in e:
+    #     if ee>0:
+    #         f_e.append( 0.55/ee**(9/20) )
+    #     else:
+    #         f_e.append(0)
+    # e_ = []
+    # for i in range(len(e)):
+    #     e_ += [e[i]]*int(len(e)*f_e[i]) 
+    # ecc = np.random.choice(e_, len(data))
 
-    ##for 0 initial eccentricity
-    # ecc = [0]*len(ehists)
+    #for 0 initial eccentricity
+    ecc = [0]*len(data)
 
     outdir = os.path.expanduser('~')+"/OutputFiles"
     if not os.path.exists(outdir):
@@ -97,11 +97,7 @@ if __name__ == "__main__":
     printing = False
     print("\n \n Starting parallel evolution...")
     # ncores = int(input("Enter the number of parallel processes needed:"))
-<<<<<<< HEAD
     ncores = 16
-=======
-    ncores = None
->>>>>>> dfdbfe64cc12e7c1ed8b26f436aeffcbbf8c2061
     if ncores == 1:
         with tqdm(total=length) as pbar:
             for i in range(length):
