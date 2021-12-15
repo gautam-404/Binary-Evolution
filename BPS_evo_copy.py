@@ -5,7 +5,6 @@ import math
 import random
 import sys, os, time
 
-import P_calc 
 
 def release_list(a):
    del a[:]
@@ -75,30 +74,13 @@ def evolve_binary(B, real_time, printing):
     while primary.mass.value_in(units.MSun)>0 and real_time<=14e9:
         primary_old_type = primary.stellar_type.value_in(units.stellar_type)
         secondary_old_type = secondary.stellar_type.value_in(units.stellar_type)
-        w_old = primary.spin.value_in(units.none)
 
         current_time += dt
         real_time += dt.value_in(units.yr)
 
         code.evolve_model( current_time )
         from_bse_to_model.copy()
-        from_bse_to_model_binaries.copy()
-
-        if primary.stellar_type.value_in(units.stellar_type) == 13 and primary_old_type <13:
-            w = w_old
-            P = ( 2 * np.pi /w ) * 3.154e+7    #seconds
-            P_bse = P
-            w_bse = w
-
-        M_dot = ( ( primary.mass - (M_old|units.MSun) )/dt ).value_in(units.MSun/units.yr)  # Mass capture by primary per year
-        
-        if primary.stellar_type.value_in(units.stellar_type) == 13:
-            w = primary.spin.value_in(units.none)
-            P = ( 2 * np.pi /w ) * 3.154e+7    #seconds
-            P_new = P
-
-        
-        
+        from_bse_to_model_binaries.copy()              
 
         ehist_arr.append( [real_time/1e6, current_time.value_in(units.Myr), binary.semi_major_axis.value_in(units.RSun)*2, primary.mass.value_in(units.MSun), 
                                primary.radius.value_in(units.RSun), primary.stellar_type.value_in(units.stellar_type), primary.spin.value_in(units.none),
