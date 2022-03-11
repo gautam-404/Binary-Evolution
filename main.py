@@ -40,7 +40,7 @@ def B_dist():
 if __name__ == "__main__":
     print("Reading the initital input parameters...")
     # filename = "Init_data_2e8.npz"
-    filename = "Init_data_1e6.npz"
+    filename = "Init_data.npz"
     if not os.path.isfile(filename):
         import BE_init
     data, M_sim = read_data(filename)
