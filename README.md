@@ -31,7 +31,7 @@ Read the paper for details: [Millisecond Pulsars from Accretion Induced Collapse
 * Run 
     ```
     cd Binary-Evolution
-    python BPS.py
+    python main.py
     ```
 This would create a folder with evolution histories of all binary systems at the path "~/OutputFiles". Consecutively, running `python BPS_eval.py` produces the data necessary to see the total gamma-ray luminosity produced by the population as a function of time. 
 
