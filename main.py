@@ -12,7 +12,7 @@ import itertools
 import os
 
 import BPS_SFH as SFH
-import BPS_evo_copy as evo
+import BPS_evo as evo
 
 
 def read_data(filename):
@@ -38,11 +38,11 @@ def B_dist():
 
 
 if __name__ == "__main__":
-    print("Reading the initital input parameters...")
-    # filename = "Init_data_2e8.npz"
-    filename = "Init_data_1e6.npz"
-    if not os.path.isfile(filename):
-        import BE_init
+    print("Reading the initial input parameters...")
+    filename = "Init_data.npz"
+    # if not os.path.isfile(filename):
+    #     import BE_init
+    import BE_init
     data, M_sim = read_data(filename)
     length = len(data)
     n_sim = length
@@ -56,15 +56,11 @@ if __name__ == "__main__":
 
     dt = 1e7
     t_end = 14e9
-    if os.path.isfile("tr.npz"):
-        tr = np.load("tr.npz", allow_pickle=True)
-        tr = tr.f.arr_0
-    else:
-        bd = input("\n What star formation history do you want the stellar population to evolve with? The MW Bulge (enter b/B) or the MW Disk (enter d/D)...\n")
-        if bd == 'b' or bd == 'B':
-            tr = SFH.SFH(dt, t_end, n_sim, length, "Bulge")
-        elif bd == 'd' or bd == 'D':
-            tr = SFH.SFH(dt, t_end, n_sim, length, "Disk")
+    bd = input("\n What star formation history do you want the stellar population to evolve with? The MW Bulge (enter b/B) or the MW Disk (enter d/D)...\n")
+    if bd == 'b' or bd == 'B':
+        tr = SFH.SFH(dt, t_end, n_sim, length, "Bulge")
+    elif bd == 'd' or bd == 'D':
+        tr = SFH.SFH(dt, t_end, n_sim, length, "Disk")
     # print(len(tr))
 
     #eccentricity
@@ -97,7 +93,7 @@ if __name__ == "__main__":
     printing = False
     print("\n \n Starting parallel evolution...")
     # ncores = int(input("Enter the number of parallel processes needed:"))
-    ncores = 16
+    ncores = 1
     if ncores == 1:
         with tqdm(total=length) as pbar:
             for i in range(length):
@@ -109,9 +105,3 @@ if __name__ == "__main__":
             for _ in tqdm(pool.istarmap(evo.parallel_evolution, iterable),
                             total=length):
                 pass
-
-        # iterable = list(zip(data, range(length), B_sam, tr, itertools.repeat(printing)))
-        # with tqdm(total=length) as pbar:
-        #     for i in range(length):
-        #         evo.parallel_evolution.remote(data[i], i, B_sam[i], tr[i], printing)
-        #         pbar.update()
