@@ -258,7 +258,7 @@ def evolve_binary(B, real_time, printing):
     secondary = stars[1]
     primary = stars[0]
     current_time = 0 |units.yr
-    dt = 1e8 |units.yr
+    dt = 1e7 |units.yr
 
 #     global alpha
 #     alpha = np.random.randint(0, 100 + 1)*np.pi/(2*100)
@@ -297,7 +297,7 @@ def evolve_binary(B, real_time, printing):
     w = primary.spin.value_in(units.none)
     P_aic = ( 2 * np.pi /w ) * 3.154e+7    #seconds
 
-    dt = 1e8|units.yr
+    dt = 1e7|units.yr
     if AIC == True or WD == True:
         Pns, wns = spin_ns_aic(primary_old, primary)
 #         print(primary_old)
@@ -345,8 +345,8 @@ def evolve_binary(B, real_time, printing):
 
 
 
-def parallel_evolution(data, i, B, t_birth, printing):
-    M1_zams, M2_zams, a_zams, e_zams  = data[0], data[1], data[2], 0
+def parallel_evolution(data, i, B, t_birth, ecc, printing):
+    M1_zams, M2_zams, a_zams, e_zams  = data[0], data[1], data[2], ecc
 
     outdir = os.path.expanduser('~')+"/OutputFiles"
         
@@ -367,6 +367,9 @@ def parallel_evolution(data, i, B, t_birth, printing):
     code.parameters.white_dwarf_IFMR_flag =  0           ## ifflag > 0 uses white dwarf IFMR, def = 0
     code.parameters.white_dwarf_cooling_flag =  1        ## wdflag > 0 uses modified-Mestel cooling for WDs (0). (default value:1)
     code.parameters.neutron_star_mass_flag = 1      ## def = 1, Belczynski
+    code.parameters.fractional_time_step_1 = 0.05    ## def = 0.05; MS phase
+    code.parameters.fractional_time_step_2 = 0.01    ## def = 0.01; GB, CHeB, AGB, HeGB phase
+    code.parameters.fractional_time_step_3 = 0.02    ## def = 0.02; HG, HeMS phase
 
     init_binary(M1_zams|units.MSun, M2_zams|units.MSun, a_zams|units.RSun, e_zams)    
 
@@ -376,9 +379,9 @@ def parallel_evolution(data, i, B, t_birth, printing):
     global real_time
     AIC, WD, NS = evolve_binary(B, t_birth, printing)
 
-    if AIC == True or WD == True:
+    # if AIC == True or WD == True:
         # print("Completed simulating AIC/WD: ", i)
-        np.savetxt(os.path.join( outdir, "EvoHist_%i" %(i)), ehist_arr)
+    np.savetxt(os.path.join( outdir, "EvoHist_%i" %(i)), ehist_arr)
 
 
 
