@@ -11,14 +11,12 @@ plt.switch_backend('agg')
 from matplotlib import gridspec
 import gzip
 import multiprocessing as mp
-import concurrent.futures
 import time, sys, os, shutil
 import glob
 import copy
 import random
 from scipy.stats import lognorm
 from tqdm import tqdm
-import paramiko
 
 
 def read_data(filename):
