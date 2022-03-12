@@ -56,14 +56,18 @@ if __name__ == "__main__":
 
     dt = 1e7
     t_end = 14e9
-    bd = input("\n What star formation history do you want the stellar population to evolve with? The MW Bulge (enter b/B) or the MW Disk (enter d/D)...\n")
-    if bd == 'b' or bd == 'B':
-        tr = SFH.SFH(dt, t_end, n_sim, length, "Bulge")
-    elif bd == 'd' or bd == 'D':
-        tr = SFH.SFH(dt, t_end, n_sim, length, "Disk")
+    if os.path.isfile("tr.npz"):
+        tr = np.load("tr.npz", allow_pickle=True)
+        tr = tr.f.arr_0
+    else:
+        bd = input("\n What star formation history do you want the stellar population to evolve with? The MW Bulge (enter b/B) or the MW Disk (enter d/D)...\n")
+        if bd == 'b' or bd == 'B':
+            tr = SFH.SFH(dt, t_end, n_sim, length, "Bulge")
+        elif bd == 'd' or bd == 'D':
+            tr = SFH.SFH(dt, t_end, n_sim, length, "Disk")
     # print(len(tr))
 
-    #eccentricity
+    #eccentricity distribution
     # e = np.linspace(0,1)
     # f_e = []
     # for ee in e:
