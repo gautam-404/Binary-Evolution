@@ -12,16 +12,10 @@ class build(_build):  # pylint: disable=invalid-name
 
 
 CUSTOM_COMMANDS = [
-    ['sudo', 'apt-get', 'update'],
-    ['sudo apt-get install build-essential gfortran python3-dev \
-  libopenmpi-dev openmpi-bin \
-  libgsl-dev cmake libfftw3-3 libfftw3-dev \
-  libgmp3-dev libmpfr6 libmpfr-dev \
-  libhdf5-serial-dev hdf5-tools \
-  libblas-dev liblapack-dev \
-  python3-venv python3-pip git']
-    ['pip', 'install', 'amuse-framework'],
-    ['pip', 'install', 'amuse-bse']
+    # ['sudo', 'apt-get', 'update'],
+    # ['']
+    # ['pip', 'install', 'amuse-framework'],
+    # ['pip', 'install', 'amuse-bse']
 ]
 
 class CustomCommands(setuptools.Command):
@@ -51,7 +45,7 @@ class CustomCommands(setuptools.Command):
         self.RunCustomCommand(command)
 
 # Configure the required packages and scripts to install.
-REQUIRED_PACKAGES = ['numpy', 'amuse-framework', 'amuse-bse', 'matplotlib']
+REQUIRED_PACKAGES = ['numpy', 'docutils','mpi4py', 'h5py', 'wheel', 'scipy', 'astropy', 'jupyter', 'pandas', 'seaborn', 'matplotlib', 'amuse-framework', 'amuse-bse', 'matplotlib']
 
 
 setuptools.setup(
