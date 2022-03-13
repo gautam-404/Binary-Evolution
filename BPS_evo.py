@@ -232,7 +232,7 @@ def main_evolution(real_time, current_time, primary, secondary, B, printing, rec
             ehist_arr.append( [real_time/1e6, current_time.value_in(units.Myr), binary.semi_major_axis.value_in(units.RSun)*2, primary.mass.value_in(units.MSun), 
                                primary.radius.value_in(units.RSun), primary.stellar_type.value_in(units.stellar_type), M_dot, 
                               secondary.mass.value_in(units.MSun), secondary.radius.value_in(units.RSun),  
-                               secondary.stellar_type.value_in(units.stellar_type), M_loss, 0, P, P_dot, B, 0, 0, 0] )
+                               secondary.stellar_type.value_in(units.stellar_type), M_loss, P, P_dot, B] )
 
             
         #### To print the evolution
@@ -258,7 +258,7 @@ def evolve_binary(B, real_time, printing):
     secondary = stars[1]
     primary = stars[0]
     current_time = 0 |units.yr
-    dt = 1e7 |units.yr
+    dt = 1e6 |units.yr
 
 #     global alpha
 #     alpha = np.random.randint(0, 100 + 1)*np.pi/(2*100)
@@ -269,7 +269,7 @@ def evolve_binary(B, real_time, printing):
     ehist_arr.append( [real_time/1e6, current_time.value_in(units.Myr), binary.semi_major_axis.value_in(units.RSun)*2, primary.mass.value_in(units.MSun), 
                                primary.radius.value_in(units.RSun), primary.stellar_type.value_in(units.stellar_type), 0, 
                               secondary.mass.value_in(units.MSun), secondary.radius.value_in(units.RSun),  
-                               secondary.stellar_type.value_in(units.stellar_type), 0, 0, 0, 0, B, 0, 0, 0] )
+                               secondary.stellar_type.value_in(units.stellar_type), 0, 0, 0, B] )
     
     real_time, current_time, primary, secondary, primary_old, secondary_old, a_old = main_evolution(real_time, current_time, primary, secondary, B, printing, recycling, dt, False)
 
@@ -297,7 +297,7 @@ def evolve_binary(B, real_time, printing):
     w = primary.spin.value_in(units.none)
     P_aic = ( 2 * np.pi /w ) * 3.154e+7    #seconds
 
-    dt = 1e7|units.yr
+    dt = 1e6|units.yr
     if AIC == True or WD == True:
         Pns, wns = spin_ns_aic(primary_old, primary)
 #         print(primary_old)
@@ -351,7 +351,6 @@ def parallel_evolution(data, i, B, t_birth, ecc, printing):
     # outdir = os.path.expanduser('~')+"/OutputFiles"
     outdir = os.path.expanduser('~')+"/OutputFiles"
         
-
     one = 0
     n_aic = 0
     
