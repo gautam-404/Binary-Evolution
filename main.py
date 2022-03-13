@@ -62,9 +62,9 @@ if __name__ == "__main__":
     else:
         bd = input("\n What star formation history do you want the stellar population to evolve with? The MW Bulge (enter b/B) or the MW Disk (enter d/D)...\n")
         if bd == 'b' or bd == 'B':
-            tr = SFH.SFH(dt, t_end, n_sim, length, "Bulge")
+            tr = SFH.SFH(dt, t_end, M_sim, length, "Bulge")
         elif bd == 'd' or bd == 'D':
-            tr = SFH.SFH(dt, t_end, n_sim, length, "Disk")
+            tr = SFH.SFH(dt, t_end, M_sim, length, "Disk")
     # print(len(tr))
 
     #eccentricity distribution
