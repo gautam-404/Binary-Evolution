@@ -33,7 +33,7 @@ Read the paper for details: [Millisecond Pulsars from Accretion Induced Collapse
     cd Binary-Evolution
     python main.py
     ```
-    In case the python program throws an MPI exception, explicitly use open-mpi instead of mpich (refer [this doc](https://amuse.readthedocs.io/en/latest/install/howto-install-AMUSE.html)) and run `echo 'export OMPI_MCA_rmaps_base_oversubscribe=yes' >> ~/.zshrc`. For Bash, replace `~/.zshrc` with `~/.bashrc`.
+    In case the python program throws an MPI exception, explicitly use open-mpi instead of mpich (refer [this doc](https://amuse.readthedocs.io/en/latest/install/howto-install-AMUSE.html)) and run `echo 'export OMPI_MCA_rmaps_base_oversubscribe=yes' >> ~/.zshrc`. For Bash, replace `~/.zshrc` with `~/.bashrc`. Restart your terminal.
     
     
 The python code will create an output folder with evolution histories of all binary systems at the path "Binary-Evolution/OutputFiles". Consecutively, running `python BPS_eval.py` produces the data necessary to see the total gamma-ray luminosity produced by the population as a function of time. 
