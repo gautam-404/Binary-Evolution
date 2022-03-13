@@ -21,7 +21,6 @@ def f_bulge(z):
     D = 3.254
     return A*z**2 + B*z + C, D
 
-
 ## disk
 def f_disk(z):
     A = -4.06e-2
