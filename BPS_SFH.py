@@ -3,7 +3,7 @@ import random
 
 def SFH(dt, t_end, M_sim, length, b_d):
     print("Sampling birth times...")
-    t = np.arange(0.1, t_end, dt)
+    t = np.arange(0, t_end, dt)
     t_end = 16e9
     dt = 1e6
     M_b = 2e10
