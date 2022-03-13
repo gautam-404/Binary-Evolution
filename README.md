@@ -33,7 +33,7 @@ Read the paper for details: [Millisecond Pulsars from Accretion Induced Collapse
     cd Binary-Evolution
     python main.py
     ```
-This would create a folder with evolution histories of all binary systems at the path "~/OutputFiles". Consecutively, running `python BPS_eval.py` produces the data necessary to see the total gamma-ray luminosity produced by the population as a function of time. 
+This would create a folder with evolution histories of all binary systems at the path "Binary-Evolution/OutputFiles". Consecutively, running `python BPS_eval.py` produces the data necessary to see the total gamma-ray luminosity produced by the population as a function of time. 
 
 Alternatively, a docker image for this project can be pulled using `docker pull algernon11/bps:ubuntu`.
 
