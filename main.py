@@ -36,7 +36,7 @@ def B_dist():
     return B_sam
 
 def runsfh(dt, t_end, M_sim, length):
-    bd = input("\n What star formation history do you want the stellar population to evolve with? The MW Bulge (enter b/B) or the MW Disk (enter d/D)...\n")
+    bd = input("\nWhat star formation history do you want the stellar population to evolve with? The MW Bulge (enter b/B) or the MW Disk (enter d/D)...\n")
     if bd == 'b' or bd == 'B':
         tr = SFH.SFH(dt, t_end, M_sim, length, "Bulge")
     elif bd == 'd' or bd == 'D':
@@ -57,9 +57,7 @@ if __name__ == "__main__":
     print("Evolving %i binary systems. \n" %length)
     print("Total mass being evolved = %e MSun \n" %M_sim)
 
-    
     B_sam = B_dist()
-
 
     dt = 1e7
     t_end = 14e9
@@ -87,7 +85,7 @@ if __name__ == "__main__":
     # ecc = np.random.choice(e_, len(data))
 
     #for 0 initial eccentricity
-    ecc = [0]*len(data)
+    ecc = [0]*length
 
     outdir = os.path.expanduser('~')+"/OutputFiles"
     if not os.path.exists(outdir):
@@ -103,7 +101,7 @@ if __name__ == "__main__":
     printing = False
     print("\n \n Starting parallel evolution...")
     # ncores = int(input("Enter the number of parallel processes needed:"))
-    ncores = None       ##number of processes spawned; None makes sure you never cross your cpu load limit
+    ncores = None
     if ncores == 1:
         with tqdm(total=length) as pbar:
             for i in range(length):
