@@ -103,7 +103,7 @@ if __name__ == "__main__":
     printing = False
     print("\n \n Starting parallel evolution...")
     # ncores = int(input("Enter the number of parallel processes needed:"))
-    ncores = None       ##number of processes spawned; None makes sure you never cross youyr cpu load limit
+    ncores = None       ##number of processes spawned; None makes sure you never cross your cpu load limit
     if ncores == 1:
         with tqdm(total=length) as pbar:
             for i in range(length):
