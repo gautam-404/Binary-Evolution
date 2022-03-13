@@ -18,7 +18,6 @@ import random
 from scipy.stats import lognorm
 from tqdm import tqdm
 
-
 def read_data(filename):
     host = "mash"
     port = 22

@@ -35,6 +35,13 @@ def B_dist():
         B_sam += [x[i]]*int(len(x)*p[i])
     return B_sam
 
+def runsfh(dt, t_end, M_sim, length):
+    bd = input("\nWhat star formation history do you want the stellar population to evolve with? The MW Bulge (enter b/B) or the MW Disk (enter d/D)...\n")
+    if bd == 'b' or bd == 'B':
+        tr = SFH.SFH(dt, t_end, M_sim, length, "Bulge")
+    elif bd == 'd' or bd == 'D':
+        tr = SFH.SFH(dt, t_end, M_sim, length, "Disk")
+    return tr
 
 
 if __name__ == "__main__":
@@ -50,22 +57,19 @@ if __name__ == "__main__":
     print("Evolving %i binary systems. \n" %length)
     print("Total mass being evolved = %e MSun \n" %M_sim)
 
-    
     B_sam = B_dist()
-
 
     dt = 1e7
     t_end = 14e9
-    if os.path.isfile("tr.npz"):
-        tr = np.load("tr.npz", allow_pickle=True)
-        tr = tr.f.arr_0
+    if not os.path.isfile("tr.npz"):
+        tr = runsfh(dt, t_end, M_sim, length)
     else:
-        bd = input("\n What star formation history do you want the stellar population to evolve with? The MW Bulge (enter b/B) or the MW Disk (enter d/D)...\n")
-        if bd == 'b' or bd == 'B':
-            tr = SFH.SFH(dt, t_end, M_sim, length, "Bulge")
-        elif bd == 'd' or bd == 'D':
-            tr = SFH.SFH(dt, t_end, M_sim, length, "Disk")
-    # print(len(tr))
+        x = input("Star-formation history data found from your prevoius run, do you wish to use it? (y/n)")
+        if x == 'n' or x == 'N':
+            tr = runsfh(dt, t_end, M_sim, length)
+        else:
+            tr = np.load("tr.npz", allow_pickle=True)
+            tr = tr.f.arr_0
 
     #eccentricity distribution
     # e = np.linspace(0,1)
@@ -81,7 +85,7 @@ if __name__ == "__main__":
     # ecc = np.random.choice(e_, len(data))
 
     #for 0 initial eccentricity
-    ecc = [0]*len(data)
+    ecc = [0]*length
 
     outdir = os.path.expanduser('~')+"/OutputFiles"
     if not os.path.exists(outdir):
@@ -97,7 +101,7 @@ if __name__ == "__main__":
     printing = False
     print("\n \n Starting parallel evolution...")
     # ncores = int(input("Enter the number of parallel processes needed:"))
-    ncores = 1
+    ncores = None
     if ncores == 1:
         with tqdm(total=length) as pbar:
             for i in range(length):

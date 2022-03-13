@@ -8,8 +8,8 @@ def SFH(dt, t_end, M_sim, length, b_d):
     dt = 1e6
     M_b = 2e10
     sfr = sfh(b_d, dt, t_end)
-    tr_sam = Nformed_at_t(dt, t_end, M_b, M_sim, sfr, int(1e8))
-    tr = random.choices(tr_sam,  k=length)
+    tr = Nformed_at_t(dt, t_end, M_b, M_sim, sfr, int(1e8))
+    tr = random.choices(tr,  k=length)
     np.savez_compressed("tr.npz", tr)
     return tr
 
@@ -20,7 +20,6 @@ def f_bulge(z):
     C = -8.42e-2
     D = 3.254
     return A*z**2 + B*z + C, D
-
 
 ## disk
 def f_disk(z):
@@ -61,9 +60,9 @@ def Nformed_at_t(dt, t_end, M_bulge, M_sim, sfr, l):
     tr = []
     l = 0
     for i in range(len(t)):
-        if sfr[i]==0 or sfr[i]==np.nan:
-            pass
-        else:
+        # if sfr[i]==0 or sfr[i]==np.nan:
+        #     pass
+        # else:
             for j in range( int(round(sfr[i])) ):
                 tr.append( t[i] )
                 l += 1

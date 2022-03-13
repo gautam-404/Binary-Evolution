@@ -9,18 +9,13 @@ Read the paper for details: [Millisecond Pulsars from Accretion Induced Collapse
 
 ### Prerequisites
 * Python
-* [AMUSE Framework](https://amuse.readthedocs.io/en/latest/install/howto-install-AMUSE.html)
+* Visit the [AMUSE docs](https://amuse.readthedocs.io/en/latest/install/howto-install-AMUSE.html) and install all the dependancies
+* Install AMUSE Framework and [BSE](https://amuse.readthedocs.io/en/latest/reference/available-codes.html#bse) with `pip`
     <br> 
     ```
     pip install amuse-framework
-    ```
-    Visit the AMUSE docs link and install all the dependancies
-* [AMUSE BSE](https://amuse.readthedocs.io/en/latest/reference/available-codes.html#bse) community code
-    <br> 
-    ```
     pip install amuse-bse
     ```
-<br>
 <br>
 
 ### Running the code
@@ -33,8 +28,12 @@ Read the paper for details: [Millisecond Pulsars from Accretion Induced Collapse
     cd Binary-Evolution
     python main.py
     ```
-This would create a folder with evolution histories of all binary systems at the path "~/OutputFiles". Consecutively, running `python BPS_eval.py` produces the data necessary to see the total gamma-ray luminosity produced by the population as a function of time. 
+    In case the python program throws an MPI exception, explicitly use open-mpi instead of mpich (refer [this doc](https://amuse.readthedocs.io/en/latest/install/howto-install-AMUSE.html)) and run `echo 'export OMPI_MCA_rmaps_base_oversubscribe=yes' >> ~/.zshrc`. For Bash, replace `~/.zshrc` with `~/.bashrc`. Restart your terminal.
+    
+    
+The python code will create an output folder with evolution histories of all binary systems at the path "~/OutputFiles". Consecutively, running `python BPS_eval.py` produces the data necessary to see the total gamma-ray luminosity produced by the population as a function of time. 
 
-Alternatively, a docker image for this project can be pulled using `docker pull algernon11/bps:ubuntu`.
+<br>
+Alternatively, a docker image for this project can be pulled using `docker pull algernon11/bps:ubuntu`. 
 
 [Contact](mailto:anujgautam11@gmail.com) for more info.
