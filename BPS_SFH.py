@@ -1,12 +1,11 @@
 import numpy as np
 import random
 
-def SFH(dt, t_end, M_sim, n_sim, b_d):
+def SFH(dt, t_end, M_sim, length, b_d):
     print("Sampling birth times...")
     t = np.arange(0, t_end, dt)
     t_end = 16e9
     dt = 1e6
-    length = n_sim
     M_b = 2e10
     sfr = sfh(b_d, dt, t_end)
     tr_sam = Nformed_at_t(dt, t_end, M_b, M_sim, sfr, int(1e8))
