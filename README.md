@@ -15,11 +15,12 @@ Read the paper for details: [Millisecond Pulsars from Accretion Induced Collapse
     pip install amuse-framework
     pip install amuse-bse
     ```
-<br>
 * Clone this repository
     ```
     git clone https://github.com/gautam-404/Binary-Evolution.git
     ```
+
+<br>
 
 NOTE: Linux users can directly clone this repository and then execute `setup.sh` to install all prerequisites:
 ```
