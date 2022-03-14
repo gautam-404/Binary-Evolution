@@ -10,4 +10,4 @@ if [ "$os" = "l" ]; then
     python3-venv python3-pip git
 fi
 
-python3 setup.py
+python3 setup.py install
