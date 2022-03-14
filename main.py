@@ -45,7 +45,7 @@ def runsfh(dt, t_end, M_sim, length):
 
 
 if __name__ == "__main__":
-    print("Reading the initial input parameters...")
+    print("\nReading the initial input parameters...\n")
     filename = "Init_data.npz"
     # if not os.path.isfile(filename):
     #     import BE_init
@@ -54,8 +54,8 @@ if __name__ == "__main__":
     length = len(data)
     n_sim = length
     
-    print("Evolving %i binary systems. \n" %length)
-    print("Total mass being evolved = %e MSun \n" %M_sim)
+    print("\nEvolving %i binary systems. \n" %length)
+    print("\nTotal mass being evolved = %e MSun \n" %M_sim)
 
     B_sam = B_dist()
 
@@ -64,7 +64,7 @@ if __name__ == "__main__":
     if not os.path.isfile("tr.npz"):
         tr = runsfh(dt, t_end, M_sim, length)
     else:
-        x = input("Star-formation history data found from your prevoius run, do you wish to use it? (y/n)")
+        x = input("\nStar-formation history data found from your prevoius run, do you wish to use it? (y/n)\n")
         if x == 'n' or x == 'N':
             tr = runsfh(dt, t_end, M_sim, length)
         else:
@@ -99,17 +99,17 @@ if __name__ == "__main__":
 
     # printing = bool(input("Printing on? (True/False)"))
     printing = False
-    print("\n \n Starting parallel evolution...")
+    print("\n \n Starting parallel evolution...\n")
     # ncores = int(input("Enter the number of parallel processes needed:"))
     ncores = None
     if ncores == 1:
         with tqdm(total=length) as pbar:
             for i in range(length):
-                evo.parallel_evolution(data[i], i, B_sam[i], tr[i], ecc[i], printing)
+                evo.parallel_evolution(data[i], i, B_sam[i], tr[i], ecc[i], printing, outdir)
                 pbar.update()
     else:
         with mp.Pool(ncores) as pool:
-            iterable = list(zip(data, range(length), B_sam, tr, ecc, itertools.repeat(printing)))
+            iterable = list(zip(data, range(length), B_sam, tr, ecc, itertools.repeat(printing), itertools.repeat(outdir)))
             for _ in tqdm(pool.istarmap(evo.parallel_evolution, iterable),
                             total=length):
                 pass

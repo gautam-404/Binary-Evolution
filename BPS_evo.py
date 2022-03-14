@@ -345,11 +345,11 @@ def evolve_binary(B, real_time, printing):
 
 
 
-def parallel_evolution(data, i, B, t_birth, ecc, printing):
+def parallel_evolution(data, i, B, t_birth, ecc, printing, outdir):
     M1_zams, M2_zams, a_zams, e_zams  = data[0], data[1], data[2], ecc
 
     # outdir = os.path.expanduser('~')+"/OutputFiles"
-    outdir = os.path.expanduser('~')+"/OutputFiles"
+    # outdir = os.path.expanduser('~')+"/OutputFiles"
         
     one = 0
     n_aic = 0
