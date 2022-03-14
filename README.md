@@ -26,7 +26,11 @@ NOTE: Linux users can simply clone this repository and then execute `setup.sh` t
 ```
 git clone https://github.com/gautam-404/Binary-Evolution.git
 cd Binary-Evolution
+```
+```
 sh setup.sh
+python3 -m venv Amuse-env
+. Amuse-env/bin/activate
 ```
 <br>
 
