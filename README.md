@@ -22,7 +22,7 @@ Read the paper for details: [Millisecond Pulsars from Accretion Induced Collapse
 
 <br>
 
-NOTE: Linux users can simply clone this repository and then execute `setup.sh` to install all prerequisites:
+**NOTE**: **Linux users** can simply clone this repository and then execute `setup.sh` to install all prerequisites:
 ```
 git clone https://github.com/gautam-404/Binary-Evolution.git
 cd Binary-Evolution
