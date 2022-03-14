@@ -3,7 +3,7 @@ import subprocess
 
 import setuptools
 import os 
-os.system('sudo apt-get install build-essential gfortran python3-dev \
+os.system('sudo sudo apt-get install build-essential gfortran python3-dev \
   libopenmpi-dev openmpi-bin \
   libgsl-dev cmake libfftw3-3 libfftw3-dev \
   libgmp3-dev libmpfr6 libmpfr-dev \
@@ -20,8 +20,26 @@ class build(_build):  # pylint: disable=invalid-name
 
 
 CUSTOM_COMMANDS = [
-    # ['sudo', 'apt-get', 'update'],
-    # ['']
+    ['sudo apt-get update'.split()],
+    ['sudo apt-get install build-essentials'.split()],
+    ['sudo spt-get install gfortran'.split()],
+    ['sudo apt-get install python3-dev'.split()],
+    ['sudo apt-get install libopenmpi-dev'.split()],
+    ['sudo apt-get install openmpi-bin'.split()],
+    ['sudo apt-get install libgsl-dev'.split()],
+    ['sudo apt-get install cmake'.split()],
+    ['sudo apt-get install libfftw3-3'.split()],
+    ['sudo apt-get install libfftw3-dev'.split()],
+    ['sudo apt-get install libgmp3-dev'.split()],
+    ['sudo apt-get install libmpfr6'.split()],
+    ['sudo apt-get install libmpfr-dev'.split()],
+    ['sudo apt-get install libhdf5-serial-dev'.split()],
+    ['sudo apt-get install hdf5-tools'.split()],
+    ['sudo apt-get install libblas-dev'.split()],
+    ['sudo apt-get install liblapack-dev'.split()],
+    ['sudo apt-get install python3-venv'.split()],
+    ['sudo apt-get install python3-pip'.split()],
+    ['sudo apt-get install git'.split()]
     # ['pip', 'install', 'amuse-framework'],
     # ['pip', 'install', 'amuse-bse']
 ]
