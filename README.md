@@ -22,7 +22,8 @@ Read the paper for details: [Millisecond Pulsars from Accretion Induced Collapse
 
 <br>
 
-### **Linux and MacOS users** can simply clone this repository and then execute `setup-linux.sh` or `setup-macos.sh`, respectively, to install all prerequisites:
+### Installing with a shell script:
+**Linux and MacOS users** can simply clone this repository and then execute `setup-linux.sh` or `setup-macos.sh`, respectively, to install all prerequisites:
 ```
 git clone https://github.com/gautam-404/Binary-Evolution.git
 cd Binary-Evolution
@@ -33,6 +34,7 @@ python3 -m venv Amuse-env
 . Amuse-env/bin/activate
 ```
 Replace `setup-linux.sh` with `setup-macos.sh` if you are on MacOS.
+
 <br>
 
 ### Running the code
