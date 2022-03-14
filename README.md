@@ -40,7 +40,7 @@ python3 -m venv Amuse-env
     cd Binary-Evolution
     python main.py
     ```
-    In case the python program throws an MPI exception, explicitly use open-mpi instead of mpich (refer [this doc](https://amuse.readthedocs.io/en/latest/install/howto-install-AMUSE.html)) and run `echo 'export OMPI_MCA_rmaps_base_oversubscribe=yes' >> ~/.zshrc`. For Bash shell, replace `~/.zshrc` with `~/.bashrc`. Restart your terminal.
+    In case the python program throws an MPI exception (like `MPI_ERR_SPAWN: could not spawn processes`), explicitly use open-mpi instead of mpich (refer [this doc](https://amuse.readthedocs.io/en/latest/install/howto-install-AMUSE.html)) and run `echo 'export OMPI_MCA_rmaps_base_oversubscribe=yes' >> ~/.zshrc`. For Bash shell, replace `~/.zshrc` with `~/.bashrc`. Restart your terminal.
     
     
 The python code will create an output folder with evolution histories of all binary systems at the path "~/OutputFiles". Consecutively, running `python BPS_eval.py` produces the data necessary to see the total gamma-ray luminosity produced by the population as a function of time. 
