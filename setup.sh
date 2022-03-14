@@ -8,6 +8,8 @@ libhdf5-serial-dev hdf5-tools \
 libblas-dev liblapack-dev \
 python3-venv python3-pip git
 
+# shelltype=`echo $0`
+
 python3 -m venv Amuse-env
 . Amuse-env/bin/activate
 alias amuse-env='. ~/virtualenvironments/Amuse-env/bin/activate'

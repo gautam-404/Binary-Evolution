@@ -11,7 +11,7 @@ class build(_build):  # pylint: disable=invalid-name
 
 
 CUSTOM_COMMANDS = [
-    ['sudo apt-get update'.split()],
+    # ['sudo apt-get update'.split()],
     # ['sudo apt-get -y install build-essentials'.split()],
     # ['sudo spt-get -y install gfortran'.split()],
     # ['sudo apt-get -y install python3-dev'.split()],
