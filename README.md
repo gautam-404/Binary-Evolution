@@ -3,9 +3,8 @@
 Read the paper for details: [Millisecond Pulsars from Accretion Induced Collapse naturally explain the Galactic Center Gamma-ray Excess](https://arxiv.org/abs/2106.00222)
 
 ## Getting started
-* *Linux users can install this repository as a package by executing `pip install git+https://github.com/gautam-404/Binary-Evolution.git`*
+<!-- * *Linux users can install this repository as a package by executing `pip install git+https://github.com/gautam-404/Binary-Evolution.git`* -->
 
-**For installation from scratch:**
 
 ### Prerequisites
 * Python
