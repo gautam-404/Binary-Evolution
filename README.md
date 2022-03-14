@@ -7,7 +7,7 @@ Read the paper for details: [Millisecond Pulsars from Accretion Induced Collapse
 
 
 ### Installation from scratch:
-* Python
+* Install Python 3
 * Visit the [AMUSE docs](https://amuse.readthedocs.io/en/latest/install/howto-install-AMUSE.html) and install all the dependancies
 * Install AMUSE Framework and [BSE](https://amuse.readthedocs.io/en/latest/reference/available-codes.html#bse) with `pip`
     <br> 
