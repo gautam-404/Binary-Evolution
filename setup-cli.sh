@@ -8,4 +8,4 @@ libhdf5-serial-dev hdf5-tools \
 libblas-dev liblapack-dev \
 python3-venv python3-pip git
 
-python3 install .
+pip install .
