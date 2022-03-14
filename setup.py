@@ -2,15 +2,6 @@ from distutils.command.build import build as _build
 import subprocess
 
 import setuptools
-import os 
-os.system('sudo sudo apt-get install build-essential gfortran python3-dev \
-  libopenmpi-dev openmpi-bin \
-  libgsl-dev cmake libfftw3-3 libfftw3-dev \
-  libgmp3-dev libmpfr6 libmpfr-dev \
-  libhdf5-serial-dev hdf5-tools \
-  libblas-dev liblapack-dev \
-  python3-venv python3-pip git')
-
 
 # This class handles the pip install mechanism.
 class build(_build):  # pylint: disable=invalid-name
@@ -21,25 +12,25 @@ class build(_build):  # pylint: disable=invalid-name
 
 CUSTOM_COMMANDS = [
     ['sudo apt-get update'.split()],
-    ['sudo apt-get install build-essentials'.split()],
-    ['sudo spt-get install gfortran'.split()],
-    ['sudo apt-get install python3-dev'.split()],
-    ['sudo apt-get install libopenmpi-dev'.split()],
-    ['sudo apt-get install openmpi-bin'.split()],
-    ['sudo apt-get install libgsl-dev'.split()],
-    ['sudo apt-get install cmake'.split()],
-    ['sudo apt-get install libfftw3-3'.split()],
-    ['sudo apt-get install libfftw3-dev'.split()],
-    ['sudo apt-get install libgmp3-dev'.split()],
-    ['sudo apt-get install libmpfr6'.split()],
-    ['sudo apt-get install libmpfr-dev'.split()],
-    ['sudo apt-get install libhdf5-serial-dev'.split()],
-    ['sudo apt-get install hdf5-tools'.split()],
-    ['sudo apt-get install libblas-dev'.split()],
-    ['sudo apt-get install liblapack-dev'.split()],
-    ['sudo apt-get install python3-venv'.split()],
-    ['sudo apt-get install python3-pip'.split()],
-    ['sudo apt-get install git'.split()]
+    ['sudo apt-get -y install build-essentials'.split()],
+    ['sudo spt-get -y install gfortran'.split()],
+    ['sudo apt-get -y install python3-dev'.split()],
+    ['sudo apt-get -y install libopenmpi-dev'.split()],
+    ['sudo apt-get -y install openmpi-bin'.split()],
+    ['sudo apt-get -y install libgsl-dev'.split()],
+    ['sudo apt-get -y install cmake'.split()],
+    ['sudo apt-get -y install libfftw3-3'.split()],
+    ['sudo apt-get -y install libfftw3-dev'.split()],
+    ['sudo apt-get -y install libgmp3-dev'.split()],
+    ['sudo apt-get -y install libmpfr6'.split()],
+    ['sudo apt-get -y install libmpfr-dev'.split()],
+    ['sudo apt-get -y install libhdf5-serial-dev'.split()],
+    ['sudo apt-get -y install hdf5-tools'.split()],
+    ['sudo apt-get -y install libblas-dev'.split()],
+    ['sudo apt-get -y install liblapack-dev'.split()],
+    ['sudo apt-get -y install python3-venv'.split()],
+    ['sudo apt-get -y install python3-pip'.split()],
+    ['sudo apt-get -y install git'.split()]
     # ['pip', 'install', 'amuse-framework'],
     # ['pip', 'install', 'amuse-bse']
 ]
@@ -71,8 +62,7 @@ class CustomCommands(setuptools.Command):
         self.RunCustomCommand(command)
 
 # Configure the required packages and scripts to install.
-REQUIRED_PACKAGES = ['numpy', 'docutils','mpi4py', 'h5py', 'wheel', 'scipy', 'astropy', 'jupyter', 'pandas', 'seaborn', 'matplotlib', 'amuse-framework', 'amuse-bse', 'matplotlib', 'tqdm']
-
+# REQUIRED_PACKAGES = ['numpy', 'docutils','mpi4py', 'h5py', 'wheel', 'scipy', 'astropy', 'jupyter', 'pandas', 'seaborn', 'matplotlib', 'amuse-framework', 'amuse-bse', 'matplotlib', 'tqdm']
 
 setuptools.setup(
     name='BPS',
