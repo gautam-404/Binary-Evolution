@@ -230,7 +230,7 @@ def main_evolution(real_time, secondary, primary, current_time, B, printing, rec
         P = ( 2 * np.pi /w ) * 3.154e+7    #seconds
         P_new = P
 
-        M_dot_edd = (4*np.pi*G*M*mp)/(eps*c*\sigma_T)
+        M_dot_edd = (4*np.pi*G*M*mp)/(eps*c*sigma_T)
 
 
          ##### Magnetic Braking #####    
