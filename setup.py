@@ -62,7 +62,7 @@ class CustomCommands(setuptools.Command):
         self.RunCustomCommand(command)
 
 # Configure the required packages and scripts to install.
-REQUIRED_PACKAGES = ['numpy', 'docutils','mpi4py', 'h5py', 'wheel', 'scipy', 'astropy', 'jupyter', 'pandas', 'seaborn', 'matplotlib', 'amuse-framework', 'amuse-bse', 'matplotlib', 'tqdm']
+REQUIRED_PACKAGES = ['pep517', 'numpy', 'docutils','mpi4py', 'h5py', 'wheel', 'scipy', 'astropy', 'jupyter', 'pandas', 'seaborn', 'matplotlib', 'amuse-framework', 'amuse-bse', 'matplotlib', 'tqdm']
 
 setuptools.setup(
     name='BPS',
