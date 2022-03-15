@@ -9,7 +9,6 @@ import itertools
 import multiprocessing as mp
 import istarmap
 from amuse.lab import Particles, units
-# import concurrent.futures
 import os
 
 def reader(filenames, j, outdir):
@@ -43,11 +42,6 @@ def read_eval(readdir):
             for _ in tqdm(pool.istarmap(reader, iterable),
                             total=length):
                 pass
-        # futures = []
-        # for x in range(0, ncores):
-        #     futures.append(executor.submit( reader, files_slice[x], x, outdir))
-
-        # print(concurrent.futures.wait(futures))
     
     ehistfiles = glob.glob(outdir+'/ehists*')
     for file in ehistfiles:
