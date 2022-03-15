@@ -1,56 +1,60 @@
 import numpy as np
+np.seterr(divide='ignore', invalid='ignore')
 import glob
 from tqdm import tqdm
 import time
 import copy
 import pickle
 import itertools
-# import multiprocessing as mp
+import multiprocessing as mp
+import istarmap
 from amuse.lab import Particles, units
-import concurrent.futures
+# import concurrent.futures
 import os
 
 def reader(filenames, j, outdir):
     ehists = []
     for i in range(len(filenames)):
-        # ehist_i = np.loadtxt(filenames[i])
-        ehist_i = np.load(filenames[i], allow_pickle=True)
-        ehist_i = ehist_i.f.arr_0
-        ehists.append(ehists, ehist_i)
-        # print(ehists)
-        # exit()
-    np.savez(outdir+"/ehists%i" %j, ehists)
+        ehist_i = np.loadtxt(filenames[i])
+        ehists.append(ehist_i)
+    np.savez(outdir+"/ehists%i"%j, ehists)
 
 def read_eval(readdir):
     filenames = glob.glob(readdir+'/EvoHist*')
-    outdir = os.path.expanduser('~')+"/Binary-Evolution/EHISTS"
+    outdir = "EHISTS"
     if not os.path.exists(outdir):
             try:
                 os.mkdir(outdir)
             except:
                 pass
+    else:
+        os.system("rm -rf "+outdir)
+        os.mkdir(outdir)
         
     ehists = np.array([])
-    ncores = 8
-    files_slice = []
-    for x in range(0, ncores):
-        files_slice.append( filenames[ int((x)*len(filenames)/ncores) : int((x+1)*len(filenames)/ncores) ] )
-    executor = concurrent.futures.ProcessPoolExecutor( max_workers = ncores )
-    
-    if ncores == 1:
-        reader(files_slice[0], 0, outdir)
-    else:
-        futures = []
-        for x in range(0, ncores):
-            futures.append(executor.submit( reader, files_slice[x], x, outdir))
+    length = len(filenames)
 
-        print(concurrent.futures.wait(futures))
+    ncores = 1
+    if ncores == 1:
+        reader(filenames, 0, outdir)
+    else:
+        with mp.Pool(ncores) as pool:
+            iterable = list(zip(filenames, range(length), itertools.repeat(outdir)))
+            for _ in tqdm(pool.istarmap(reader, iterable),
+                            total=length):
+                pass
+        # futures = []
+        # for x in range(0, ncores):
+        #     futures.append(executor.submit( reader, files_slice[x], x, outdir))
+
+        # print(concurrent.futures.wait(futures))
     
     ehistfiles = glob.glob(outdir+'/ehists*')
     for file in ehistfiles:
-        x = np.load(file)
+        x = np.load(file, allow_pickle=True)
         ehists = np.append(ehists, x.f.arr_0)
     np.savez("ehists__", ehists)
+    os.system("rm -rf "+outdir)
     return ehists
 
 def aic_index(ehists):
