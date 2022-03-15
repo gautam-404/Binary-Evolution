@@ -53,4 +53,4 @@ The python code will create an output folder with evolution histories of all bin
 <br>
 Alternatively, a docker image for this project can be pulled using `docker pull algernon11/bps:ubuntu`. 
 
-[Contact](mailto:anujgautam11@gmail.com) for more info.
+[Contact](mailto:gautam.anuj.1195@gmail.com) for more info.
