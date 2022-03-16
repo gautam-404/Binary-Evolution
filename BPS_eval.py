@@ -13,9 +13,10 @@ import os
 
 def reader(filenames, j, outdir):
     ehists = []
-    for i in range(len(filenames)):
-        ehist_i = np.loadtxt(filenames[i])
-        ehists.append(ehist_i)
+    # for filename in filenames:
+    #     print(filename)
+    ehist_i = np.loadtxt(filenames)
+    ehists.append(ehist_i)
     np.savez(outdir+"/ehists%i"%j, ehists)
 
 def read_eval(readdir):
@@ -33,7 +34,7 @@ def read_eval(readdir):
     ehists = np.array([])
     length = len(filenames)
 
-    ncores = 1
+    ncores = 2
     if ncores == 1:
         reader(filenames, 0, outdir)
     else:
@@ -611,58 +612,58 @@ class Distributions:
 def call_distributions(indices):
     return Distributions(indices)
 
+if __name__ == "__main__":
+    al = np.linspace(0, np.pi/2, int(1e3))
+    alpdf = 0.5*np.sin(al)
 
-al = np.linspace(0, np.pi/2, int(1e3))
-alpdf = 0.5*np.sin(al)
+    n_ = 1e4
+    a_sam = []
+    for i in range(len(al)):
+        a_sam += [al[i]]*int(n_*alpdf[i])
 
-n_ = 1e4
-a_sam = []
-for i in range(len(al)):
-    a_sam += [al[i]]*int(n_*alpdf[i])
+    etalist = np.arange(0.1, 0.3, 0.001)
+    ## eta_L
+    mu = 12    ##log10x_med = mu
+    sigma = 0.52
+    s = np.random.normal(mu, sigma, int(1e6))
+    x = np.linspace(min(10**s), max(10**s), int(4e3))
+    p = (np.sqrt(2*np.pi)*sigma)**-1 * np.exp( -(np.log10(x)-np.log10(10**mu))**2 /(2*sigma**2)  )
+    eta_sam = []
+    for i in range(len(x)):
+        eta_sam += [x[i]]*int(len(x)*p[i])
 
-etalist = np.arange(0.1, 0.3, 0.001)
-## eta_L
-mu = 12    ##log10x_med = mu
-sigma = 0.52
-s = np.random.normal(mu, sigma, int(1e6))
-x = np.linspace(min(10**s), max(10**s), int(4e3))
-p = (np.sqrt(2*np.pi)*sigma)**-1 * np.exp( -(np.log10(x)-np.log10(10**mu))**2 /(2*sigma**2)  )
-eta_sam = []
-for i in range(len(x)):
-    eta_sam += [x[i]]*int(len(x)*p[i])
+    ## B
+    mu = 8.21
+    sigma = 0.21
+    s = np.random.normal(mu, sigma, int(1e6))
+    B_sim_chris = 10**s
+    x = np.linspace(min(B_sim_chris), max(B_sim_chris), int(4e3))
+    p = (np.sqrt(2*np.pi)*sigma)**-1 * np.exp( -(np.log10(x)-np.log10(10**mu))**2 /(2*sigma**2)  )
+    B_sam = []
+    for i in range(len(x)):
+        B_sam += [x[i]]*int(len(x)*p[i])
 
-## B
-mu = 8.21
-sigma = 0.21
-s = np.random.normal(mu, sigma, int(1e6))
-B_sim_chris = 10**s
-x = np.linspace(min(B_sim_chris), max(B_sim_chris), int(4e3))
-p = (np.sqrt(2*np.pi)*sigma)**-1 * np.exp( -(np.log10(x)-np.log10(10**mu))**2 /(2*sigma**2)  )
-B_sam = []
-for i in range(len(x)):
-    B_sam += [x[i]]*int(len(x)*p[i])
-
-print("Reading output files...")
-ehists = read_eval(os.path.expanduser('~')+"/OutputFiles")
-aic_indices = aic_index(ehists)
-
-
-dt = 1e8
-t_end = 14e9
-accretion = True
-# accretion = False
-# dist_disk = call_distributions(ehists_disk, accretion, dt)
-xi = 0.5
-ehists = copy.copy(ehists)
-print("Getting the luminosity data....")
-dist1 = call_distributions(aic_indices)
+    print("Reading output files...")
+    ehists = read_eval(os.path.expanduser('~')+"/OutputFiles")
+    aic_indices = aic_index(ehists)
 
 
-def save_object(obj, filename):
-    with open(filename, 'wb') as output:  # Overwrites any existing file.
-        pickle.dump(obj, output, pickle.HIGHEST_PROTOCOL)
+    dt = 1e8
+    t_end = 14e9
+    accretion = True
+    # accretion = False
+    # dist_disk = call_distributions(ehists_disk, accretion, dt)
+    xi = 0.5
+    ehists = copy.copy(ehists)
+    print("Getting the luminosity data....")
+    dist1 = call_distributions(aic_indices)
 
-save_object(dist1, 'dist1.pkl')
 
-# with open('dist1.pkl', 'rb') as input:
-#     dist1 = pickle.load(input)
+    def save_object(obj, filename):
+        with open(filename, 'wb') as output:  # Overwrites any existing file.
+            pickle.dump(obj, output, pickle.HIGHEST_PROTOCOL)
+
+    save_object(dist1, 'dist1.pkl')
+
+    # with open('dist1.pkl', 'rb') as input:
+    #     dist1 = pickle.load(input)
