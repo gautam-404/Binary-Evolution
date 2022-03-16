@@ -35,7 +35,7 @@ python3 -m venv Amuse-env
 ```
 Replace `setup-linux.sh` with `setup-macos.sh` if you are on MacOS.
 
-NOTE: For the shell script to work on MacOS, users need to have [MacPorts](https://www.macports.org/) installed.
+NOTE: For this shell script to work on MacOS, users need to have [MacPorts](https://www.macports.org/) installed.
 
 <br>
 
