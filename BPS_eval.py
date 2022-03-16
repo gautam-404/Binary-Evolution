@@ -13,8 +13,6 @@ import os
 
 def reader(filenames, j, outdir):
     ehists = []
-    # for filename in filenames:
-    #     print(filename)
     ehist_i = np.loadtxt(filenames)
     ehists.append(ehist_i)
     np.savez(outdir+"/ehists%i"%j, ehists)
@@ -34,7 +32,7 @@ def read_eval(readdir):
     ehists = np.array([])
     length = len(filenames)
 
-    ncores = 2
+    ncores = None
     if ncores == 1:
         reader(filenames, 0, outdir)
     else:
