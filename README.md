@@ -2,6 +2,10 @@
 
 Read the paper for details: [Millisecond Pulsars from Accretion Induced Collapse naturally explain the Galactic Center Gamma-ray Excess](https://arxiv.org/abs/2106.00222)
 
+Supplementary reading:
+* [Nature Astronomy publication](https://www.nature.com/articles/s41550-022-01658-3)
+* [Nature Astronomy blog post](https://astronomycommunity.nature.com/posts/millisecond-pulsars-from-accretion-induced-collapse-naturally-explain-the-galactic-center-gamma-ray-excess)
+
 ## Getting started
 <!-- * *Linux users can install this repository as a package by executing `pip install git+https://github.com/gautam-404/Binary-Evolution.git`* -->
 
