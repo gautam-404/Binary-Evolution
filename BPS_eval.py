@@ -536,8 +536,8 @@ class Distributions:
             self.delKE_acc.append(delKE_acc/3.154e+7**2)
             self.delKE_prop.append(delKE_prop/3.154e+7**2)
             self.delKE_mdb.append(delKE_mdb/3.154e+7**2)
-            mass =  ehists[i][j,3] * 1.989e+33  ##g
-            r =  ehists[i][j,4] * 6.957e+10     ##cm
+            mass = ehists[i][j,3] * 1.989e+33  ##g
+            r = ehists[i][j,4] * 6.957e+10     ##cm
             I = (0.4)*(mass*r**2)      ##g cm^2
             self.KE138.append(0.5*I*w**2/3.154e+7**2)
             if ehists[i][j,7] <0.001:
