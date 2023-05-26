@@ -87,7 +87,7 @@ if __name__ == "__main__":
     #for 0 initial eccentricity
     ecc = [0]*length
 
-    outdir = os.path.expanduser('~')+"/OutputFiles"
+    outdir = "./OutputFiles"
     if not os.path.exists(outdir):
             try:
                 os.mkdir(outdir)

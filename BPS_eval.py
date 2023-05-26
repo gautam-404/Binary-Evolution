@@ -2,34 +2,28 @@ import numpy as np
 np.seterr(divide='ignore', invalid='ignore')
 import glob
 from tqdm import tqdm
-import time
 import copy
 import pickle
 import itertools
 import multiprocessing as mp
 import istarmap
-from amuse.lab import Particles, units
+from amuse.lab import units
 import os
+import pandas as pd
 
-def reader(filenames, j, outdir):
-    ehists = []
-    ehist_i = np.loadtxt(filenames)
-    ehists.append(ehist_i)
-    np.savez(outdir+"/ehists%i"%j, ehists)
+def reader(filename, j, outdir):
+    ehist_i = np.loadtxt(filename)
+    np.save(outdir+"/ehists%i"%j, ehist_i)
 
 def read_eval(readdir):
     filenames = glob.glob(readdir+'/EvoHist*')
     outdir = "EHISTS"
     if not os.path.exists(outdir):
-            try:
-                os.mkdir(outdir)
-            except:
-                pass
+        os.mkdir(outdir)
     else:
         os.system("rm -rf "+outdir)
         os.mkdir(outdir)
         
-    ehists = np.array([])
     length = len(filenames)
 
     ncores = None
@@ -42,11 +36,13 @@ def read_eval(readdir):
                             total=length):
                 pass
     
+    ehists = []
     ehistfiles = glob.glob(outdir+'/ehists*')
     for file in ehistfiles:
-        x = np.load(file, allow_pickle=True)
-        ehists = np.append(ehists, x.f.arr_0)
-    np.savez("ehists__", ehists)
+        x = np.load(file)
+        if len(x.shape)==1:
+            x = np.array([x])
+        ehists.append(x)
     os.system("rm -rf "+outdir)
     return ehists
 
@@ -67,7 +63,8 @@ def aic_index(ehists):
                 aic = True
             except ValueError:
                 aic = False
-            pbar.update()    
+            pbar.update()   
+    print(len(aic_indices)) 
     return aic_indices
 
 
@@ -605,11 +602,6 @@ class Distributions:
                 pbar.update()
         print("Done!")
 
-                    
-
-def call_distributions(indices):
-    return Distributions(indices)
-
 if __name__ == "__main__":
     al = np.linspace(0, np.pi/2, int(1e3))
     alpdf = 0.5*np.sin(al)
@@ -642,7 +634,7 @@ if __name__ == "__main__":
         B_sam += [x[i]]*int(len(x)*p[i])
 
     print("Reading output files...")
-    ehists = read_eval(os.path.expanduser('~')+"/OutputFiles")
+    ehists = read_eval("./OutputFiles")
     aic_indices = aic_index(ehists)
 
 
@@ -654,14 +646,12 @@ if __name__ == "__main__":
     xi = 0.5
     ehists = copy.copy(ehists)
     print("Getting the luminosity data....")
-    dist1 = call_distributions(aic_indices)
+    # dist1 = call_distributions(aic_indices)
+    dist1 = Distributions(aic_indices)
 
+    print(dist1.dNdL_gamma[0])
+    
 
-    def save_object(obj, filename):
-        with open(filename, 'wb') as output:  # Overwrites any existing file.
-            pickle.dump(obj, output, pickle.HIGHEST_PROTOCOL)
-
-    save_object(dist1, 'dist1.pkl')
-
-    # with open('dist1.pkl', 'rb') as input:
-    #     dist1 = pickle.load(input)
+    with open('dist1.pkl', 'wb') as output:  # Overwrites any existing file.
+        # pickle.dump(dist1, output, pickle.HIGHEST_PROTOCOL)
+        pd.to_pickle(dist1, output)
