@@ -44,7 +44,7 @@ M_tot = float(input("Enter the total mass to be simulated (units MSun) \n"))
 manager = mp.Manager()
 init_data = manager.list()
 ncores = None
-l = int(M_tot/9.6)
+l = int(M_tot)
 with tqdm(total=l) as pbar:
         pool = mp.Pool(ncores)
         for i in range(l):

@@ -653,5 +653,4 @@ if __name__ == "__main__":
     
 
     with open('dist1.pkl', 'wb') as output:  # Overwrites any existing file.
-        # pickle.dump(dist1, output, pickle.HIGHEST_PROTOCOL)
-        pd.to_pickle(dist1, output)
+        pickle.dump(dist1, output, pickle.HIGHEST_PROTOCOL)
