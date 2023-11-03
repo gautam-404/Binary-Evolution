@@ -1,25 +1,27 @@
-#!/usr/local/bin/python
-
 import numpy as np
-np.seterr(divide = 'ignore')
-np.seterr(invalid = 'ignore')
+import pandas as pd
 import matplotlib.pyplot as plt
 import istarmap
 import multiprocessing as mp
-import random
+from rich import print, prompt
 from tqdm import tqdm
 import itertools
 import os
-
 import BPS_SFH as SFH
 import BPS_evo as evo
+import BE_init as init
 
+# Suppress runtime warnings
+np.seterr(divide='ignore', invalid='ignore')
 
 def read_data(filename):
-    data = np.load(filename, allow_pickle=True)
-    data = data.f.arr_0
-    M_sim = sum(data[:,0])+sum(data[:,1])
-    return data, M_sim
+    # data = np.load(filename, allow_pickle=True)
+    # data = data.f.arr_0
+    # M_sim = sum(data[:,0])+sum(data[:,1])
+    # return data, M_sim
+    data = pd.read_csv(filename)
+    M_sim = sum(data['M1'])+sum(data['M2'])
+    return data.values, M_sim
 
 ## Magnetic field strength distribution
 def B_dist():
@@ -36,21 +38,38 @@ def B_dist():
     return B_sam
 
 def runsfh(dt, t_end, M_sim, length):
-    bd = input("\nWhat star formation history do you want the stellar population to evolve with? The MW Bulge (enter b/B) or the MW Disk (enter d/D)...\n")
+    bd = prompt.Prompt.ask(f"What star formation history do you want the stellar population to evolve with? The MW Bulge (enter b/B) or the MW Disk (enter d/D)...", choices=["b", "B", "d", "D"])
     if bd == 'b' or bd == 'B':
-        tr = SFH.SFH(dt, t_end, M_sim, length, "Bulge")
+        tr = SFH.sample_birth_times(dt, t_end, M_sim, length, "Bulge")
     elif bd == 'd' or bd == 'D':
-        tr = SFH.SFH(dt, t_end, M_sim, length, "Disk")
+        tr = SFH.sample_birth_times(dt, t_end, M_sim, length, "Disk")
     return tr
 
+def create_input_data(filename, save=True):
+    M_tot = float(input("Enter the total mass to be simulated (units MSun) \n"))
+    binary_systems, total_mass = init.generate_binary_systems(M_tot, tolerance=1e7)
+    print(f'Total mass simulated = {total_mass:.4e} MSun')
+    if save:
+        binary_systems.to_csv(filename, index=False)
+    return binary_systems, total_mass
 
 if __name__ == "__main__":
-    print("\nReading the initial input parameters...\n")
-    filename = "Init_data.npz"
-    # if not os.path.isfile(filename):
-    #     import BE_init
-    import BE_init
-    data, M_sim = read_data(filename)
+    filename = "input_data.csv"
+    binary_systems, M_sim = None, None
+    if not os.path.isfile(filename):
+        binary_systems, M_sim = create_input_data(filename, False)
+    elif prompt.Prompt.ask(f"Do you want to overwrite the existing input data file?", choices=["y", "n"]) == "y":
+        binary_systems, M_sim = create_input_data(filename, False)
+    else:
+        print("Using existing input data file...")
+        
+    if binary_systems is None:
+        print("\nReading the initial input parameters...\n")
+        binary_systems, M_sim = read_data(filename)
+    else:
+        print("Using newly generated input data...")
+    
+    data = binary_systems.to_numpy()
     length = len(data)
     n_sim = length
     
@@ -61,15 +80,17 @@ if __name__ == "__main__":
 
     dt = 1e7
     t_end = 14e9
-    if not os.path.isfile("tr.npz"):
-        tr = runsfh(dt, t_end, M_sim, length)
-    else:
-        x = input("\nStar-formation history data found from your prevoius run, do you wish to use it? (y/n)\n")
-        if x == 'n' or x == 'N':
-            tr = runsfh(dt, t_end, M_sim, length)
-        else:
-            tr = np.load("tr.npz", allow_pickle=True)
-            tr = tr.f.arr_0
+    tr = runsfh(dt, t_end, M_sim, length)
+
+    # if not os.path.isfile("tr.npz"):
+    #     tr = runsfh(dt, t_end, M_sim, length)
+    # else:
+    #     x = input("\nStar-formation history data found from your prevoius run, do you wish to use it? (y/n)\n")
+    #     if x == 'n' or x == 'N':
+    #         tr = runsfh(dt, t_end, M_sim, length)
+    #     else:
+    #         tr = np.load("tr.npz", allow_pickle=True)
+    #         tr = tr.f.arr_0
 
     #eccentricity distribution
     # e = np.linspace(0,1)
