@@ -80,7 +80,7 @@ if __name__ == "__main__":
 
     B_sam = B_dist(num_samples=n_sim)
 
-    dt = 1e6
+    dt = 1e4
     t_end = 14e9
     tr = runsfh(dt, t_end, M_sim, length)
 

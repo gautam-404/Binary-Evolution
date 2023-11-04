@@ -36,6 +36,7 @@ class BinaryEvolution:
     def init_binary(self, M_primary, M_secondary, a, e):
         # Initialize a binary system
         self.stars[0].mass = M_primary
+        self.stars[0].spin = 0 | units.none
         self.stars[1].mass = M_secondary
 
         self.binary = self.binaries[0]
@@ -104,6 +105,8 @@ class BinaryEvolution:
         angular_velocity_wd = (2 * np.pi / (period_wd | units.s)) if period_wd else 0
         angular_velocity_old = Omega
 
+        mdot_efficiency = 0.1
+        mdot *= mdot_efficiency
         # B = B.value_in(units.T) | (units.cm**(-1/2)) * (units.g**(1/2)) * (units.s**-1)
 
         # AIC-specific calculations
@@ -146,11 +149,10 @@ class BinaryEvolution:
             period_dot_GW = (p - p_old) / (dt)
             period_dot_final = period_dot_GW
 
-            print(p)
-
         # Non-AIC calculations
         else:
-            mdot_lim = 0 | (units.MSun / units.yr)
+            # print(mdot)
+            mdot_lim = 1e-7 | (units.MSun / units.yr)
             if abs(mdot) > mdot_lim:
                 # Calculations for mass_loss_rate > mdot_lim
                 xi = 1  # Propeller parameter
@@ -185,14 +187,15 @@ class BinaryEvolution:
             else:
                 w_s = 0
                 # Calculations for mass_loss_rate <= mdot_lim
-                # angular_acceleration = B.value_in(units.T/1e4)**2 * np.pi**2 * R.value_in(units.RSun)**6 * (1 + np.sin(inclination)**2) / (p_old.value_in(units.s) * moment_of_inertia.value_in(units.g * units.cm**2) * constants.c.value_in(units.cm / units.s)**3)
                 ## magnetic braking
                 mu = B * R**3
                 I = 0.4 * M * R**2
-                Omega = (2 * np.pi / p_old).as_quantity_in(1 / units.s)
-                Power_dipole = (2 * mu**2 * Omega**4 * np.sin(inclination)**2 / (3 * constants.c**3))
-                Omega_dot = (-Power_dipole / (I * Omega))
-                period_dot_mdb = p**2 * Omega_dot / (2 * np.pi)
+                # Omega_dot = B**2 * np.pi**2 * R**6 * (1 + np.sin(inclination)**2) / (p_old * I * constants.c**3)
+                # Omega = (2 * np.pi / p_old).as_quantity_in(1/units.s)
+                # Power_dipole = -(2 * mu**2 * Omega**4 * np.sin(inclination)**2 / (3 * constants.c**3))
+                # Omega_dot = -Power_dipole / (I * Omega)
+                # period_dot_mdb = p**2 * Omega_dot / (2 * np.pi)
+                period_dot_mdb = 8*(np.pi*mu*np.sin(inclination))**2/(3*p*I*constants.c**3)
                 p += period_dot_mdb * dt
                 flag = 3
                 period_dot_final = period_dot_mdb
@@ -207,35 +210,37 @@ class BinaryEvolution:
 
         # Update period and calculate period derivative
         pdot = (p - p_old) / (dt.as_quantity_in(units.yr))
-        if pdot == np.inf or pdot == -np.inf or pdot == np.nan:
-            pdot = 0
+        # if pdot == np.inf or pdot == -np.inf or pdot == np.nan:
+        #     pdot = 0
 
         print(p_old)
         print(period_dot_acc, period_dot_GW, period_dot_prop, period_dot_mdb)
         print(flag, p, pdot, w_s)
-        # # if pdot!=0:
-        exit()
+        print("")
+        # exit()
 
         # Return the updated values
         return (p, Omega, w_s, pdot, flag, alpha, period_dot_mdb)
 
     def spin_to_period(self, spin):
         # Calculate the period and period derivative
-        P = (2 * np.pi / spin.value_in(units.none)) | units.Gyr #seconds
+        P = 2 * np.pi / spin.value_in(units.none) | units.s
         return P.as_quantity_in(units.s)
     def period_to_spin(self, period):
         # Calculate the period and period derivative
-        w = (2 * np.pi / period.value_in(units.s)) | units.none
+        w = (2 * np.pi / period.value_in(units.yr)) | units.none
         return w
 
-    def spin_after_collapse(self, star_old, star):
+    # def spin_after_collapse(self, star_old, star):
         # Calculate the angular momentum of the star
-        I = star.mass * star.radius**2
-        I_old = star_old.mass * star_old.radius**2
-        I_ratio = I_old/I
-        # Get new spin
-        spin = I_ratio * star_old.spin.value_in(units.none) | units.none
-        return spin
+        # return (star_old.radius**2/star.radius**2) * star_old.spin.value_in(units.none) | units.none
+        # I = star.mass * star.radius**2
+        # # I_old = 0.3*star_old.mass * star_old.radius**2
+        # I_old = star.mass * star_old.radius**2
+        # I_ratio = I_old/I
+        # # Get new spin
+        # spin = I_ratio * star_old.spin.value_in(units.none) | units.none
+        # return spin
 
 
     def rotation_update(self, primary, secondary, primary_old, secondary_old, P_primary, dt):
@@ -247,22 +252,25 @@ class BinaryEvolution:
 
         if primary.stellar_type.value_in(units.stellar_type) == 13: 
             if primary_old_type != 13:
-                P_primary = self.spin_to_period(self.spin_after_collapse(primary_old, primary))
+                # P_primary = self.spin_to_period(self.spin_after_collapse(primary_old, primary))
                 if secondary_old_type not in [10, 11, 12]:
-                    self.B = 1e2 | 1e-4 * (units.cm**(-1/2)) * (units.g**(1/2)) * (units.s**-1)   # Gauss
+                    self.B = 1e13 | 1e-4 * (units.cm**(-1/2)) * (units.g**(1/2)) * (units.s**-1)   # Gauss
                 elif secondary_old_type in [10, 11]:
-                    self.B = 1e5 | 1e-4 * (units.cm**(-1/2)) * (units.g**(1/2)) * (units.s**-1)   # Gauss
+                    self.B = 1e13 | 1e-4 * (units.cm**(-1/2)) * (units.g**(1/2)) * (units.s**-1)   # Gauss
                 Pdot_primary = (P_primary - P_primary_old)/dt
             
             is_aic = True if primary_old_type == 12 else False
             period_wd = self.spin_to_period(primary_old.spin) if primary_old_type == 12 else 0
             spin_data = self.magnetic_braking(p=P_primary, dt=dt, B=self.B, M=primary.mass, 
-                                            mdot=mdot_primary, R=primary.radius, inclination=0, 
+                                            mdot=mdot_primary, R=primary.radius, inclination=self.magnetic_axis_inclination, 
                                             is_aic=is_aic, alpha=np.random.random(),
                                             period_wd=period_wd, old_mass=primary_old.mass, 
                                             old_radius=primary_old.radius)
             P_primary = spin_data[0]
             Pdot_primary = spin_data[3]
+            ## Rotation check, break up period
+            P_breakup = np.pi * np.sqrt(primary.radius**3 / (constants.G * primary.mass))
+            P_primary = P_breakup.as_quantity_in(units.s) if P_primary < P_breakup else P_primary
         else:
             P_primary = self.spin_to_period(primary.spin)
             Pdot_primary = (self.spin_to_period(primary.spin) - self.spin_to_period(primary_old.spin))/dt
@@ -289,7 +297,7 @@ class BinaryEvolution:
         Pdot_primary = 0
         Pdot_secondary = 0
 
-        self.ehist_arr.append( [self.real_time/1e6, current_time.value_in(units.Myr), self.binary.semi_major_axis.value_in(units.RSun)*2, self.ecc, primary.mass.value_in(units.MSun), mdot_primary.value_in(units.MSun/units.Myr), 
+        self.ehist_arr.append( [self.real_time/1e6, current_time.value_in(units.Myr), self.binary.semi_major_axis.value_in(units.RSun)*2, self.ecc, self.magnetic_axis_inclination, primary.mass.value_in(units.MSun), mdot_primary.value_in(units.MSun/units.Myr), 
                                 primary.radius.value_in(units.RSun), primary.stellar_type.value_in(units.stellar_type), P_primary.value_in(units.s), Pdot_primary, self.B.value_in(1e-4 * (units.cm**(-1/2)) * (units.g**(1/2)) * (units.s**-1)),
                                 secondary.mass.value_in(units.MSun), mdot_secondary.value_in(units.MSun/units.Myr), secondary.radius.value_in(units.RSun), secondary.stellar_type.value_in(units.stellar_type)])
         
@@ -313,7 +321,7 @@ class BinaryEvolution:
 
                 
             ## Ehists
-            self.ehist_arr.append( [self.real_time/1e6, current_time.value_in(units.Myr), self.binary.semi_major_axis.value_in(units.RSun)*2, self.ecc, primary.mass.value_in(units.MSun), mdot_primary.value_in(units.MSun/units.Myr), 
+            self.ehist_arr.append( [self.real_time/1e6, current_time.value_in(units.Myr), self.binary.semi_major_axis.value_in(units.RSun)*2, self.ecc, self.magnetic_axis_inclination, primary.mass.value_in(units.MSun), mdot_primary.value_in(units.MSun/units.Myr), 
                                 primary.radius.value_in(units.RSun), primary.stellar_type.value_in(units.stellar_type), P_primary.value_in(units.s), Pdot_primary, self.B.value_in(1e-4 * (units.cm**(-1/2)) * (units.g**(1/2)) * (units.s**-1)),
                                 secondary.mass.value_in(units.MSun), mdot_secondary.value_in(units.MSun/units.Myr), secondary.radius.value_in(units.RSun), secondary.stellar_type.value_in(units.stellar_type)])
                                                   
@@ -322,8 +330,10 @@ class BinaryEvolution:
                 self.print_evolution(primary, secondary, current_time, self.real_time)
             if (primary_old_type == 12 and primary.stellar_type.value_in(units.stellar_type) == 13) or (secondary_old_type == 12 and secondary.stellar_type.value_in(units.stellar_type) == 13):
                 AIC = True
+                self.dt = 1e6 |units.yr
             if (primary.stellar_type.value_in(units.stellar_type) == 13 and primary_old_type!=13) or (secondary_old_type != 13 and secondary.stellar_type.value_in(units.stellar_type) == 13):
                 NS = True
+                self.dt = 1e6 |units.yr
             if primary.stellar_type.value_in(units.stellar_type) > 13 or secondary.stellar_type.value_in(units.stellar_type) > 13:
                 dt = 1e7 |units.yr
         return AIC, NS
@@ -338,6 +348,7 @@ class BinaryEvolution:
         self.t_birth = t_birth
         self.real_time = t_birth
         self.ecc = ecc
+        self.magnetic_axis_inclination = (np.pi/2)*np.random.random()
         self.printing = printing
         self.outdir = outdir
         self.init_binary(M1_zams | units.MSun, M2_zams | units.MSun, a_zams | units.RSun, e_zams)
@@ -364,7 +375,7 @@ class BinaryEvolution:
                 print(f"NS = {self.NS}")
 
         # if self.NS == True:
-        df = pd.DataFrame(self.ehist_arr, columns=["real_time", "current_time", "separation", "Ecc", "M1", "Mdot1", "R1",
+        df = pd.DataFrame(self.ehist_arr, columns=["real_time", "current_time", "separation", "Ecc", "B_incl", "M1", "Mdot1", "R1",
                             "T1", "P1", "Pdot1", "B", "M2", "Mdot2", "R2", "T2"], dtype=float)
         df['T1'] = df['T1'].astype(int)
         df['T2'] = df['T2'].astype(int)
