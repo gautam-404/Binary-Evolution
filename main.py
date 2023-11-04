@@ -3,6 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import istarmap
 import multiprocessing as mp
+from concurrent import futures
 from rich import print, prompt
 from tqdm import tqdm
 import itertools
@@ -15,33 +16,29 @@ import BE_init as init
 np.seterr(divide='ignore', invalid='ignore')
 
 def read_data(filename):
-    # data = np.load(filename, allow_pickle=True)
-    # data = data.f.arr_0
-    # M_sim = sum(data[:,0])+sum(data[:,1])
-    # return data, M_sim
     data = pd.read_csv(filename)
     M_sim = sum(data['M1'])+sum(data['M2'])
     return data.values, M_sim
 
 ## Magnetic field strength distribution
-def B_dist():
-    print("B_dist...")
-    mu = 8.21
-    sigma = 0.21
-    s = np.random.normal(mu, sigma, int(1e6))
-    B_sim_chris = 10**s
-    x = np.linspace(min(B_sim_chris), max(B_sim_chris), int(4e3))
-    p = (np.sqrt(2*np.pi)*sigma)**-1 * np.exp( -(np.log10(x)-np.log10(10**mu))**2 /(2*sigma**2)  )
-    B_sam = []
-    for i in range(len(x)):
-        B_sam += [x[i]]*int(len(x)*p[i])
-    return B_sam
+def B_dist(num_samples=1e6, num_bins=4e3, mu=8.21, sigma=0.21):
+    print("Generating B_dist...")
+    log_normal_samples = np.random.normal(mu, sigma, int(num_samples))
+    B_samples = 10 ** log_normal_samples
+    hist, bin_edges = np.histogram(B_samples, bins=int(num_bins), density=True)
+    bin_centers = 0.5 * (bin_edges[:-1] + bin_edges[1:])
+    B_sampled = np.random.choice(bin_centers, size=int(num_samples), p=hist/hist.sum())
+    return B_sampled
+
+## Uniform eccentricity distribution
+def ecc_dist(num_samples=1e6, min_ecc=0.0, max_ecc=1.0):
+    print("Generating eccenctricity distribution...")
+    ecc_samples = np.random.uniform(min_ecc, max_ecc, int(num_samples))
+    return ecc_samples
+
 
 def runsfh(dt, t_end, M_sim, length):
-    bd = prompt.Prompt.ask(f"What star formation history do you want the stellar \
-                           population to evolve with? The MW Bulge (enter b/B), \
-                           the MW Disk (enter d/D) \
-                           or enter n/N for a single burst of star formation at t = 0....", choices=["b", "B", "d", "D", "n", "N"])
+    bd = prompt.Prompt.ask(f"What star formation history do you want the stellar population to evolve with? The MW Bulge (enter b/B), the MW Disk (enter d/D) or enter n/N for a single burst of star formation at t = 0....", choices=["b", "B", "d", "D", "n", "N"])
     if bd == 'b' or bd == 'B':
         tr = SFH.sample_birth_times(dt, t_end, M_sim, length, "Bulge")
     elif bd == 'd' or bd == 'D':
@@ -81,26 +78,13 @@ if __name__ == "__main__":
     print("\nEvolving %i binary systems. \n" %length)
     print("\nTotal mass being evolved = %e MSun \n" %M_sim)
 
-    B_sam = B_dist()
+    B_sam = B_dist(num_samples=n_sim)
 
     dt = 1e6
     t_end = 14e9
     tr = runsfh(dt, t_end, M_sim, length)
 
-    #eccentricity distribution
-    # e = np.linspace(0,1)
-    # f_e = []
-    # for ee in e:
-    #     if ee>0:
-    #         f_e.append( 0.55/ee**(9/20) )
-    #     else:
-    #         f_e.append(0)
-    # e_ = []
-    # for i in range(len(e)):
-    #     e_ += [e[i]]*int(len(e)*f_e[i]) 
-    # ecc = np.random.choice(e_, len(data))
-
-    #for 0 initial eccentricity
+    # For 0 initial eccentricity
     ecc = [0]*length
 
     outdir = "./OutputFiles"
@@ -117,15 +101,18 @@ if __name__ == "__main__":
     printing = False
     print("\n \n Starting parallel evolution...\n")
     # ncores = int(input("Enter the number of parallel processes needed:"))
+
     ncores = 1
     if ncores == 1:
         with tqdm(total=length) as pbar:
             for i in range(length):
-                evo.evolve(data[i], i, B_sam[i], tr[i], ecc[i], printing, outdir)
+                evo.evolve(data[i], i, dt, B_sam[i], tr[i], ecc[i], printing, outdir)
                 pbar.update()
     else:
         with mp.Pool(ncores) as pool:
-            iterable = list(zip(data, range(length), B_sam, tr, ecc, itertools.repeat(printing), itertools.repeat(outdir)))
+            iterable = list(zip(data, range(length), itertools.repeat(dt), B_sam, tr, ecc, itertools.repeat(printing), itertools.repeat(outdir)))
             for _ in tqdm(pool.istarmap(evo.evolve, iterable),
                             total=length):
                 pass
+
+
