@@ -1,43 +1,5 @@
-# ## Bulge
-# def f_bulge(z):
-#     A = -2.62e-2
-#     B = 0.384
-#     C = -8.42e-2
-#     D = 3.254
-#     return A*z**2 + B*z + C, D
-
-# ## disk
-# def f_disk(z):
-#     A = -4.06e-2
-#     B = 0.331
-#     C = 0.338
-#     D = 0.771
-#     return A*z**2 + B*z + C, D
-
-
-# def z(t, t_end):
-#     t0 = t_end
-#     z_ = np.sqrt((28e9 - t)/t) -1
-#     return z_
-
-
-# def sfh(b_d, dt, t_end):
-#     ## SFR
-#     t = np.arange(0, t_end, dt)
-#     sfh = []
-#     for time in t: 
-#         if b_d == "Bulge":
-#             ft, D = f_bulge(z(time, t_end))
-#         elif b_d == "Disk":
-#             ft, D = f_disk(z(time, t_end))
-#         rate = 10**(max(ft, 0)) - D
-#         if rate >= 0:
-#             sfh.append(rate)
-#         else:
-#             sfh.append(0)
-#     return np.array(sfh)
-
 import numpy as np
+
 # Suppress runtime warnings
 np.seterr(divide='ignore', invalid='ignore')
 
@@ -63,6 +25,22 @@ def sample_birth_times(dt, t_end, M_sim, length, bulge_or_disk):
     # np.savez_compressed("tr.npz", birth_times)
     return birth_times
 
+def z_at_time(t):
+    """
+    Calculate the redshift at a given time.
+    
+    Parameters:
+    t (float): Time in years.
+    
+    Returns:
+    float: Redshift at the given time.
+    """
+    # z = np.arange(0, 1000, 0.01)
+    # t_ = Planck18.age(z).value
+    # return np.interp(t/1e9, z, t_)
+    ## The Cosmic Time in Terms of the Redshift 2005, Carmeli et al.
+    return np.sqrt(28e9/t - 1) - 1
+
 def calculate_star_formation_rate(bulge_or_disk, dt, t_end):
     """
     Calculate the star formation rate based on the galaxy's bulge or disk.
@@ -83,7 +61,7 @@ def calculate_star_formation_rate(bulge_or_disk, dt, t_end):
     else:
         raise ValueError("Invalid value for bulge_or_disk. Must be 'Bulge' or 'Disk'.")
     
-    z = np.sqrt((28e9 - t) / t) - 1
+    z = z_at_time(t)
     ft = A * z**2 + B * z + C
     rate = 10**(np.maximum(ft, 0)) - D
     rate = np.nan_to_num(rate, nan=0)
@@ -116,9 +94,9 @@ if __name__ == "__main__":
     t_end = 14e9
     M_sim = 1e9
     length = int(1e6)
-    bulge_or_disk = "Disk"
+    bulge_or_disk = "Bulge"
     tr = sample_birth_times(dt, t_end, M_sim, length, bulge_or_disk)
     tr = tr/1e9
-    plt.hist(tr, bins=1000)
+    plt.hist(tr, bins=100)
     plt.yscale("log")
     plt.show()

@@ -38,11 +38,16 @@ def B_dist():
     return B_sam
 
 def runsfh(dt, t_end, M_sim, length):
-    bd = prompt.Prompt.ask(f"What star formation history do you want the stellar population to evolve with? The MW Bulge (enter b/B) or the MW Disk (enter d/D)...", choices=["b", "B", "d", "D"])
+    bd = prompt.Prompt.ask(f"What star formation history do you want the stellar \
+                           population to evolve with? The MW Bulge (enter b/B), \
+                           the MW Disk (enter d/D) \
+                           or enter n/N for a single burst of star formation at t = 0....", choices=["b", "B", "d", "D", "n", "N"])
     if bd == 'b' or bd == 'B':
         tr = SFH.sample_birth_times(dt, t_end, M_sim, length, "Bulge")
     elif bd == 'd' or bd == 'D':
         tr = SFH.sample_birth_times(dt, t_end, M_sim, length, "Disk")
+    elif bd == 'n' or bd == 'N':
+        tr = np.zeros(length)
     return tr
 
 def create_input_data(filename, save=True):
@@ -78,19 +83,9 @@ if __name__ == "__main__":
 
     B_sam = B_dist()
 
-    dt = 1e7
+    dt = 1e6
     t_end = 14e9
     tr = runsfh(dt, t_end, M_sim, length)
-
-    # if not os.path.isfile("tr.npz"):
-    #     tr = runsfh(dt, t_end, M_sim, length)
-    # else:
-    #     x = input("\nStar-formation history data found from your prevoius run, do you wish to use it? (y/n)\n")
-    #     if x == 'n' or x == 'N':
-    #         tr = runsfh(dt, t_end, M_sim, length)
-    #     else:
-    #         tr = np.load("tr.npz", allow_pickle=True)
-    #         tr = tr.f.arr_0
 
     #eccentricity distribution
     # e = np.linspace(0,1)
@@ -122,15 +117,15 @@ if __name__ == "__main__":
     printing = False
     print("\n \n Starting parallel evolution...\n")
     # ncores = int(input("Enter the number of parallel processes needed:"))
-    ncores = None
+    ncores = 1
     if ncores == 1:
         with tqdm(total=length) as pbar:
             for i in range(length):
-                evo.parallel_evolution(data[i], i, B_sam[i], tr[i], ecc[i], printing, outdir)
+                evo.evolve(data[i], i, B_sam[i], tr[i], ecc[i], printing, outdir)
                 pbar.update()
     else:
         with mp.Pool(ncores) as pool:
             iterable = list(zip(data, range(length), B_sam, tr, ecc, itertools.repeat(printing), itertools.repeat(outdir)))
-            for _ in tqdm(pool.istarmap(evo.parallel_evolution, iterable),
+            for _ in tqdm(pool.istarmap(evo.evolve, iterable),
                             total=length):
                 pass

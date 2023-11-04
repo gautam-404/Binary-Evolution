@@ -33,7 +33,7 @@ def generate_binary_systems(M_tot, tolerance=1e7):
         'M1': M1,
         'M2': M2,
         'Period': Period,
-        'Separation': 2 * a
+        'Semi-major axis': a
     })
 
     # Ensure the total mass is close to M_tot but not exceeded
