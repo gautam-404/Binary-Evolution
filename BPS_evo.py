@@ -187,36 +187,29 @@ class BinaryEvolution:
             else:
                 w_s = 0
                 # Calculations for mass_loss_rate <= mdot_lim
-                ## magnetic braking
+                ## magnetic dipole braking
                 mu = B * R**3
                 I = 0.4 * M * R**2
-                # Omega_dot = B**2 * np.pi**2 * R**6 * (1 + np.sin(inclination)**2) / (p_old * I * constants.c**3)
-                # Omega = (2 * np.pi / p_old).as_quantity_in(1/units.s)
-                # Power_dipole = -(2 * mu**2 * Omega**4 * np.sin(inclination)**2 / (3 * constants.c**3))
-                # Omega_dot = -Power_dipole / (I * Omega)
-                # period_dot_mdb = p**2 * Omega_dot / (2 * np.pi)
                 period_dot_mdb = 8*(np.pi*mu*np.sin(inclination))**2/(3*p*I*constants.c**3)
                 p += period_dot_mdb * dt
                 flag = 3
                 period_dot_final = period_dot_mdb
 
-        # # Determine the dominant braking mechanism
-        # if abs(period_dot_mdb) > abs(period_dot_prop):
-        #     flag = 3
-        # elif abs(period_dot_mdb) < abs(period_dot_prop):
-        #     flag = 2
-        # elif abs(period_dot_GW) > abs(period_dot_mdb) and abs(period_dot_GW) > abs(period_dot_prop):
-        #     flag = 1
+        # Determine the dominant braking mechanism
+        if abs(period_dot_mdb) > abs(period_dot_prop):
+            flag = 3
+        elif abs(period_dot_mdb) < abs(period_dot_prop):
+            flag = 2
+        elif abs(period_dot_GW) > abs(period_dot_mdb) and abs(period_dot_GW) > abs(period_dot_prop):
+            flag = 1
 
         # Update period and calculate period derivative
         pdot = (p - p_old) / (dt.as_quantity_in(units.yr))
-        # if pdot == np.inf or pdot == -np.inf or pdot == np.nan:
-        #     pdot = 0
 
-        print(p_old)
-        print(period_dot_acc, period_dot_GW, period_dot_prop, period_dot_mdb)
-        print(flag, p, pdot, w_s)
-        print("")
+        # print(p_old)
+        # print(period_dot_acc, period_dot_GW, period_dot_prop, period_dot_mdb)
+        # print(flag, p, pdot, w_s)
+        # print("")
         # exit()
 
         # Return the updated values
@@ -231,17 +224,6 @@ class BinaryEvolution:
         w = (2 * np.pi / period.value_in(units.yr)) | units.none
         return w
 
-    # def spin_after_collapse(self, star_old, star):
-        # Calculate the angular momentum of the star
-        # return (star_old.radius**2/star.radius**2) * star_old.spin.value_in(units.none) | units.none
-        # I = star.mass * star.radius**2
-        # # I_old = 0.3*star_old.mass * star_old.radius**2
-        # I_old = star.mass * star_old.radius**2
-        # I_ratio = I_old/I
-        # # Get new spin
-        # spin = I_ratio * star_old.spin.value_in(units.none) | units.none
-        # return spin
-
 
     def rotation_update(self, primary, secondary, primary_old, secondary_old, P_primary, dt):
         P_primary_old = P_primary.copy()
@@ -252,7 +234,6 @@ class BinaryEvolution:
 
         if primary.stellar_type.value_in(units.stellar_type) == 13: 
             if primary_old_type != 13:
-                # P_primary = self.spin_to_period(self.spin_after_collapse(primary_old, primary))
                 if secondary_old_type not in [10, 11, 12]:
                     self.B = 1e13 | 1e-4 * (units.cm**(-1/2)) * (units.g**(1/2)) * (units.s**-1)   # Gauss
                 elif secondary_old_type in [10, 11]:
@@ -330,6 +311,7 @@ class BinaryEvolution:
                 self.print_evolution(primary, secondary, current_time, self.real_time)
             if (primary_old_type == 12 and primary.stellar_type.value_in(units.stellar_type) == 13) or (secondary_old_type == 12 and secondary.stellar_type.value_in(units.stellar_type) == 13):
                 AIC = True
+                NS = True
                 self.dt = 1e6 |units.yr
             if (primary.stellar_type.value_in(units.stellar_type) == 13 and primary_old_type!=13) or (secondary_old_type != 13 and secondary.stellar_type.value_in(units.stellar_type) == 13):
                 NS = True
