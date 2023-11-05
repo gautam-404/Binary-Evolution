@@ -1,7 +1,6 @@
 import os
 import glob
 import numpy as np
-import pandas as pd
 from tqdm import tqdm
 import multiprocessing as mp
 import shutil
@@ -10,7 +9,6 @@ import numpy as np
 from tqdm import tqdm
 from amuse.units import units, constants
 import numpy as np
-import amuse
 
 # Suppress numpy warnings
 np.seterr(divide='ignore', invalid='ignore')

@@ -1,16 +1,14 @@
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-import istarmap
+from src.utils import istarmap
 import multiprocessing as mp
-from concurrent import futures
 from rich import print, prompt
 from tqdm import tqdm
 import itertools
 import os
-import BPS_SFH as SFH
-import BPS_evo as evo
-import BE_init as init
+import src.BPS_SFH as SFH
+import src.BPS_evo as evo
+import src.BE_init as init
 
 # Suppress runtime warnings
 np.seterr(divide='ignore', invalid='ignore')
