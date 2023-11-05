@@ -6,7 +6,6 @@ from amuse.units import units, constants
 
 np.seterr(divide='ignore', invalid='ignore')
 
-
 class BinaryEvolution:
     def __init__(self, code=None):
         self.stars = Particles(2)
