@@ -1,0 +1,14 @@
+numpy
+pandas
+docutils
+mpi4py
+h5py
+wheel
+scipy
+astropy
+jupyter
+seaborn
+matplotlib
+tqdm
+amuse-framework
+amuse-bse

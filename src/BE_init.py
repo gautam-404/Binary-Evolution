@@ -46,8 +46,8 @@ def generate_binary_systems(M_tot, tolerance=1e7):
         total_mass = df['M1'].sum() + df['M2'].sum()
     return df, total_mass
 
-
-# M_tot = float(input("Enter the total mass to be simulated (units MSun) \n"))
-# binary_systems, total_mass = generate_binary_systems(M_tot, tolerance=1e7)
-# print(f'Total mass simulated = {total_mass:.4e} MSun')
-# binary_systems.to_csv("Init_data.csv", index=False)
+# if __name__ == "__main__"
+#     M_tot = float(input("Enter the total mass to be simulated (units MSun) \n"))
+#     binary_systems, total_mass = generate_binary_systems(M_tot, tolerance=1e7)
+#     print(f'Total mass simulated = {total_mass:.4e} MSun')
+#     binary_systems.to_csv("Init_data.csv", index=False)

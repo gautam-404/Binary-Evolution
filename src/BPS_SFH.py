@@ -88,6 +88,7 @@ def formed_at_time(dt, t_end, M_bulge_initial, M_sim, sfr, l):
     birth_times = np.repeat(t, normalized_sfr.astype(int))
     return birth_times
 
+
 if __name__ == "__main__":
     import matplotlib.pyplot as plt
     dt = 1e7

@@ -1,11 +1,12 @@
 import numpy as np
 import pandas as pd
-from src.utils import istarmap
 import multiprocessing as mp
 from rich import print, prompt
 from tqdm import tqdm
 import itertools
 import os
+
+from src.utils import istarmap
 import src.BPS_SFH as SFH
 import src.BPS_evo as evo
 import src.BE_init as init
@@ -33,7 +34,6 @@ def ecc_dist(num_samples=1e6, min_ecc=0.0, max_ecc=1.0):
     print("Generating eccenctricity distribution...")
     ecc_samples = np.random.uniform(min_ecc, max_ecc, int(num_samples))
     return ecc_samples
-
 
 def runsfh(dt, t_end, M_sim, length):
     bd = prompt.Prompt.ask(f"What star formation history do you want the stellar population to evolve with? The MW Bulge (enter b/B), the MW Disk (enter d/D) or enter n/N for a single burst of star formation at t = 0....", choices=["b", "B", "d", "D", "n", "N"])

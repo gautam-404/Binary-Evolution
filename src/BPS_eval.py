@@ -9,6 +9,8 @@ import numpy as np
 from tqdm import tqdm
 from amuse.units import units, constants
 import numpy as np
+import copy
+import pickle
 
 # Suppress numpy warnings
 np.seterr(divide='ignore', invalid='ignore')
