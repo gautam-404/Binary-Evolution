@@ -22,23 +22,6 @@ Supplementary reading:
     ```
     git clone https://github.com/gautam-404/Binary-Evolution.git
     ```
-
-<br>
-
-### Installing with a shell script:
-**Linux and MacOS users** can simply clone this repository and then execute `setup-linux.sh` or `setup-macos.sh`, respectively, to install all prerequisites:
-```
-git clone https://github.com/gautam-404/Binary-Evolution.git
-cd Binary-Evolution
-```
-```
-sh setup-linux.sh
-python3 -m venv Amuse-env
-. Amuse-env/bin/activate
-```
-
-NOTE: For the shell script to work on MacOS, users need to have [MacPorts](https://www.macports.org/) installed.
-
 <br>
 
 ### Running the code
