@@ -35,11 +35,12 @@ def z_at_time(t):
     Returns:
     float: Redshift at the given time.
     """
-    # z = np.arange(0, 1000, 0.01)
-    # t_ = Planck18.age(z).value
-    # return np.interp(t/1e9, z, t_)
+    from astropy.cosmology import Planck18
+    z = np.arange(0, 100, 0.01)
+    t_ = Planck18.age(z).value
+    return np.interp(t/1e9, z, t_)
     ## The Cosmic Time in Terms of the Redshift 2005, Carmeli et al.
-    return np.sqrt(28e9/t - 1) - 1
+    # return np.sqrt(28e9/t - 1) - 1
 
 def calculate_star_formation_rate(bulge_or_disk, dt, t_end):
     """
@@ -53,7 +54,8 @@ def calculate_star_formation_rate(bulge_or_disk, dt, t_end):
     Returns:
     numpy.ndarray: Array of star formation rates at each time step.
     """
-    t = np.arange(0, t_end, dt)
+    t_offset = 350e6
+    t = np.arange(-t_offset, t_end-t_offset, dt)
     if bulge_or_disk == "Bulge":
         A, B, C, D = -2.62e-2, 0.384, -8.42e-2, 3.254
     elif bulge_or_disk == "Disk":
@@ -64,7 +66,7 @@ def calculate_star_formation_rate(bulge_or_disk, dt, t_end):
     z = z_at_time(t)
     ft = A * z**2 + B * z + C
     rate = 10**(np.maximum(ft, 0)) - D
-    rate = np.nan_to_num(rate, nan=0)
+    # rate = np.nan_to_num(rate, nan=0)
     return np.maximum(rate, 0)
 
 def formed_at_time(dt, t_end, M_bulge_initial, M_sim, sfr, l):
@@ -96,8 +98,14 @@ if __name__ == "__main__":
     M_sim = 1e9
     length = int(1e6)
     bulge_or_disk = "Bulge"
-    tr = sample_birth_times(dt, t_end, M_sim, length, bulge_or_disk)
-    tr = tr/1e9
-    plt.hist(tr, bins=100)
+    # tr = sample_birth_times(dt, t_end, M_sim, length, bulge_or_disk)
+    tr = calculate_star_formation_rate(bulge_or_disk, dt, t_end)
+    tr = tr
+    # plt.hist(tr, bins=100)
+    t = np.arange(0, t_end, dt)
+    plt.plot(t/1e9, tr)
+    plt.title(bulge_or_disk)
     plt.yscale("log")
+    plt.xlabel("Cosmological Age (Gyr)")
+    plt.ylabel("Star Formation Rate (MSun/yr)")
     plt.show()

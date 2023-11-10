@@ -168,14 +168,14 @@ class BinaryEvolution:
                 w_K_r_m = w_K_r_m.as_quantity_in(1 / units.yr)
                 w_s = Omega / w_K_r_m  # Spin parameter
 
-                if r_m.value_in(units.km) < r_c.value_in(units.km):
+                if r_m.value_in(units.km) < r_c.value_in(units.km):     ## normal accretion spin-up
                     Omega_dot = mdot * np.sqrt(constants.G * M * r_m) / I
                     Omega += Omega_dot * dt
                     p = (2 * np.pi / Omega)
                     period_dot_acc = (p - p_old) / dt
                     period_dot_final = period_dot_acc
                     flag = 1
-                elif r_m.value_in(units.km) >= r_c.value_in(units.km):
+                elif r_m.value_in(units.km) >= r_c.value_in(units.km):  ## propeller effect can either spin-up or spin-down the star depending on the value of w_s
                     # Calculations for r_m >= r_c
                     Omega_dot = - (1 - w_s) * 8.1e-5 * np.sqrt(xi) * (M.value_in(units.MSun) / 1.4)**(3.0/7.0) * (1e45 / I.value_in(units.g * units.cm**2)) * (mu.value_in((units.cm**(-1/2)) * (units.g**(1/2)) * (units.s**-1) * units.m**3) / 1e30)**(2.0/7.0) * (p_old.value_in(units.s) * abs(mdot.value_in(units.MSun / units.yr) / 1e-9)**(3.0/7.0))**2
                     Omega_dot = Omega_dot | (units.s**-2)
